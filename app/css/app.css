@@ -1,0 +1,252 @@
+body {
+  background-color: #ddd;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 20px;
+}
+
+img {
+  vertical-align: middle;
+}
+
+input {
+  font: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.content {
+  max-width: 960px;
+}
+
+.span-save {
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.margins {
+  margin-top: 2px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.padding {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 7px;
+  padding-top: 2px;
+}
+
+.rounded-box {
+  border-width: 0px;
+  border-radius: 4px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #777;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+  border-color: #506070;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(32, 48, 64, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(32, 48, 64, 0.6);
+}
+
+button {
+  margin: 0em;
+  font: -webkit-small-control;
+  color: initial;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid ;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.btn-primary {
+  color: #ccc;
+  font-weight: bold;
+  background-color: #304050;
+  border-color: #102030;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active  {
+  color: #fff;
+  border-color: #102030;
+  background-color: #506070;
+}
+
+.dark-blue-bg {
+  background-color: #203040;
+}
+
+.medium-blue-bg {
+  background-color: #304050;
+}
+
+.text-on-blue {
+  color: #ccc;
+}
+
+.sidebar-heading {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 7px;
+  font-size: 1.3em;
+}
+
+.sidebar-heading-skin {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #071720;
+}
+
+.sidebar-item-borders {
+  color: inherit;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #304050;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #071720;
+  border-right-width: 0px;
+  border-left-width: 0px;
+}
+
+.sidebar-item-borders:last-child {
+  border-bottom-width: 0px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.sidebar-item {
+  display: block;
+  padding: 5px 15px;
+  position: relative;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+
+/* highlight hovered item a bit... */
+a:hover.sidebar-item {
+  color: #eee;
+  text-decoration: inherit;
+}
+/* ...but not if it is already selected */
+a:hover.sidebar-item-active {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* needs to be defined after sidebar-item */
+.sidebar-item-active {
+  font-weight: bold;
+  border-top-color: #031017;
+  border-bottom-color: #203040;
+  background-image: none;
+  background-color: #102030;
+}
+
+/* in headline */
+.current-item {
+  font-size: 18px;
+  font-weight: bold;
+  height: 28px;
+  line-height: 36px;
+}
+
+.current-item-edit {
+  width: 80%;
+  color: #333;
+  line-height: 18px;
+}
+
+.todo-text {
+  height: 200px;
+  background-color: #eee;
+}
+
+.todo-text-edit {
+  width: 97%;
+}
+
+/*
+.box-shadow-inset {
+  -webkit-box-shadow: inset 1px 1px 2px 0px black;
+     -moz-box-shadow: inset 1px 1px 2px 0px black;
+          box-shadow: inset 1px 1px 2px 0px black;
+}
+.todo-text {
+  height: 200px;
+  overflow: auto;
+  margin-bottom: 1em;
+  background-color: #eee;
+  width: 100%;
+}
+*/
+
+.footer {
+  font-size: small;
+  width: 100%;
+  text-align: center;
+}
+
+.initially-invisible {
+  display: none;
+}
+
+.create-conv-anim.ng-hide-add, .create-conv-anim.ng-hide-remove {
+  -webkit-transition:all linear 0.4s;
+     -moz-transition:all linear 0.4s;
+       -o-transition:all linear 0.4s;
+          transition:all linear 0.4s;
+  display:block!important;
+}
+
+.create-conv-anim.ng-hide-add.ng-hide-add-active,
+.create-conv-anim.ng-hide-remove {
+  opacity:0;
+}
+
+.create-conv-anim.ng-hide-add,
+.create-conv-anim.ng-hide-remove.ng-hide-remove-active {
+  opacity:1;
+}

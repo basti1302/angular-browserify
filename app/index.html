@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Angular and Browserify</title>
+  <link rel="stylesheet" href="css/normalize.css"></link>
+  <link rel="stylesheet" href="css/unsemantic-grid-responsive.css"></link>
+  <link rel="stylesheet" href="css/app.css"></link>
+</head>
+
+<body>
+<div class="content grid-container" ng-app="myapp">
+
+  <div class="grid-20 grid-parent">
+    <div class="margins rounded-box text-on-blue">
+      <div class="sidebar-heading sidebar-heading-skin dark-blue-bg">Your Todos</div>
+      <div ng-controller="TodoListCtrl">
+        <a href="#"
+          ng-repeat="todo in getTodos()"
+          ng-click="select(todo)"
+          class="sidebar-item-borders sidebar-item dark-blue-bg"
+          ng-class="getCssClass(todo)"
+        >
+          <span ng-bind="todo.title"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div ng-controller="TodoEditCtrl" class="grid-80 grid-parent">
+    <form novalidate role="form">
+
+      <div
+        ng-click="toggleEditTitle()"
+        class="margins padding rounded-box dark-blue-bg text-on-blue"
+      >
+        <div ng-show="!editMode">
+          <span ng-bind="getTodo().title" class="current-item"/>
+        </div>
+        <div ng-show="editMode">
+          <input
+            type="text"
+            ng-model="getTodo().title"
+            class="current-item current-item-edit"
+          />
+        </div>
+      </div>
+
+      <div class="margins padding rounded-box medium-blue-bg text-on-blue">
+        <span>Due:</span>
+          {{ getTodo().due | date : 'short' }}
+      </div>
+
+      <div
+        ng-show="!editMode"
+        class="margins padding rounded-box todo-text"
+      >
+        <span ng-bind="getTodo().text"></span>
+      </div>
+      <div
+        ng-show="editMode"
+      >
+        <textarea ng-model="getTodo().text" class="margins padding todo-text todo-text-edit"></textarea>
+      </div>
+
+      <div ng-show="!editMode">
+        <span class="span-save">
+          <button ng-click="edit()" class="btn btn-primary">Edit</button>
+          <button ng-click="new()" class="btn btn-primary">New</button>
+        </span>
+      </div>
+      <div ng-show="editMode">
+        <span class="span-save">
+          <button ng-click="cancel()" class="btn btn-primary">Cancel</button>
+          <button ng-click="save()" class="btn btn-primary">Save</button>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <div
+    ng-controller="FooterCtrl"
+    class="footer"
+  >Angular &amp; Browserify Example, Version: {{version}}</div>
+
+</div>
+
+<script src="dist/app.js" type="text/javascript"></script>
+
+</body>
+</html>
