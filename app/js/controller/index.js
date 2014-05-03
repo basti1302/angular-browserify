@@ -1,5 +1,5 @@
 'use strict';
 
-require('./todo_edit');
+require('./edit_todo');
 require('./todo_list');
 require('./footer');
