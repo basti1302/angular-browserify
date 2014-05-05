@@ -1,3 +1,5 @@
 'use strict';
 
-require('./todos');
+var myApp = require('angular').module('myapp');
+
+myApp.service('TodoService', require('./todos'));

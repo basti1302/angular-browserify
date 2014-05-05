@@ -2,20 +2,27 @@
 
 var angular = require('angular');
 
-angular
-  .module('myapp')
-  .controller('TodoListCtrl',
-  function($scope, TodoService) {
+module.exports = function($scope, TodoService, $rootScope) {
+
+  $scope.activeTodo = TodoService.getTodos()[0];
 
   $scope.getTodos = TodoService.getTodos.bind(TodoService);
-  $scope.select = TodoService.select.bind(TodoService);
+
+  $scope.select = function(todo) {
+    $scope.activeTodo = todo;
+    $rootScope.$emit('select-active-todo', todo);
+  };
+
+  $rootScope.$on('set-active-todo', function(evnt, todo) {
+    $scope.activeTodo = todo;
+  });
 
   $scope.getCssClass = function(todo) {
-    if (todo === TodoService.getTodo()) {
+    if (todo === $scope.activeTodo) {
       return ['sidebar-item-active'];
     } else {
       return [];
     }
   };
 
-});
+};

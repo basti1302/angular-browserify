@@ -27,20 +27,17 @@
     </div>
   </div>
 
-  <div ng-controller="TodoEditCtrl" class="grid-80 grid-parent">
+  <div ng-controller="EditTodoCtrl" class="grid-80 grid-parent">
     <form novalidate role="form">
 
-      <div
-        ng-click="toggleEditTitle()"
-        class="margins padding rounded-box dark-blue-bg text-on-blue"
-      >
+      <div class="margins padding rounded-box dark-blue-bg text-on-blue">
         <div ng-show="!editMode">
-          <span ng-bind="getTodo().title" class="current-item"/>
+          <span ng-bind="todo.title" class="current-item"/>
         </div>
         <div ng-show="editMode">
           <input
             type="text"
-            ng-model="getTodo().title"
+            ng-model="todo.title"
             class="current-item current-item-edit"
           />
         </div>
@@ -48,25 +45,25 @@
 
       <div class="margins padding rounded-box medium-blue-bg text-on-blue">
         <span>Due:</span>
-          {{ getTodo().due | date : 'short' }}
+          {{ todo.due | date : 'short' }}
       </div>
 
       <div
         ng-show="!editMode"
         class="margins padding rounded-box todo-text"
       >
-        <span ng-bind="getTodo().text"></span>
+        <span ng-bind="todo.text"></span>
       </div>
       <div
         ng-show="editMode"
       >
-        <textarea ng-model="getTodo().text" class="margins padding todo-text todo-text-edit"></textarea>
+        <textarea ng-model="todo.text" class="margins padding todo-text todo-text-edit"></textarea>
       </div>
 
       <div ng-show="!editMode">
         <span class="span-save">
           <button ng-click="edit()" class="btn btn-primary">Edit</button>
-          <button ng-click="new()" class="btn btn-primary">New</button>
+          <button ng-click="create()" class="btn btn-primary">New</button>
         </span>
       </div>
       <div ng-show="editMode">

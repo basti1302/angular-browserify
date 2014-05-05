@@ -2,9 +2,7 @@
 
 var angular = require('angular');
 
-angular
-  .module('myapp')
-  .service('TodoService', function() {
+module.exports = function() {
 
   var todos = [{
     title: 'Buy milk',
@@ -26,32 +24,20 @@ angular
     text: 'Because, who wouldn\'t want that?',
   }];
 
-  var todo = todos[0];
-
   this.getTodos = function() {
     return todos;
   };
 
-  this.select = function(_todo) {
-    todo = _todo;
-  };
-
-  this.getTodo = function() {
-    return todo;
-  };
-
   this.create = function() {
-    todo = {
+    return {
       title: '',
       due: createDate(0, 0, 1, 12, 0),
       text: '',
     };
-    todos.push(todo);
   };
 
-  this.undoCreate = function() {
-    todos.pop();
-    todo = todos[0];
+  this.insert = function(todo) {
+    todos.push(todo);
   };
 
   function createDate(year, month, day, hour, minute) {
@@ -63,4 +49,5 @@ angular
       hour, minute, 0, 0
     );
   }
-});
+
+};

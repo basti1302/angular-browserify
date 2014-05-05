@@ -1,5 +1,7 @@
 'use strict';
 
-require('./edit_todo');
-require('./todo_list');
-require('./footer');
+var myApp = require('angular').module('myapp');
+
+myApp.controller('EditTodoCtrl', require('./edit_todo'));
+myApp.controller('FooterCtrl', require('./footer'));
+myApp.controller('TodoListCtrl', require('./todo_list'));

@@ -2,43 +2,58 @@
 
 var angular = require('angular');
 
-angular
-  .module('myapp')
-  .controller('TodoEditCtrl',
-  function($scope, TodoService) {
+module.exports = function($scope, TodoService, $rootScope) {
 
   var backupForCancel;
+  var creatingNew = false;
 
+  $scope.todo = TodoService.getTodos()[0];
   $scope.editMode = false;
 
-  $scope.getTodo = TodoService.getTodo.bind(TodoService);
+  $scope.getTodo = function() {
+    return $scope.todo;
+  };
 
-  $scope.new = function() {
-    TodoService.create();
+  $scope.create = function() {
+    $scope.todo = TodoService.create();
+    backupForCancel = null;
+    creatingNew = true;
     $scope.editMode = true;
+    $rootScope.$emit('set-active-todo', null);
   };
 
   $scope.edit = function() {
-    backupForCancel = angular.copy(TodoService.getTodo());
+    backupForCancel = angular.copy($scope.todo);
+    creatingNew = false;
     $scope.editMode = true;
   };
 
   $scope.save = function() {
+    if (creatingNew) {
+      TodoService.insert($scope.todo);
+    }
     $scope.editMode = false;
+    creatingNew = false;
     backupForCancel = null;
+    $rootScope.$emit('set-active-todo', $scope.todo);
   };
 
   $scope.cancel = function() {
-    if (backupForCancel) {
-      var t = TodoService.getTodo();
-      t.title = backupForCancel.title;
-      t.due = backupForCancel.due;
-      t.text = backupForCancel.text;
-    } else {
-      // currently creating a new item
-      TodoService.undoCreate();
+    if (!creatingNew) {
+      // rollback edits
+      $scope.todo.title = backupForCancel.title;
+      $scope.todo.due = backupForCancel.due;
+      $scope.todo.text = backupForCancel.text;
     }
+    creatingNew = false;
     $scope.editMode = false;
+    $rootScope.$emit('set-active-todo', $scope.todo);
   };
 
-});
+  $rootScope.$on('select-active-todo', function(evnt, todo) {
+    if (!$scope.editMode) {
+      $scope.todo = todo;
+    }
+  });
+
+};

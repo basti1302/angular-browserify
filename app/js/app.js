@@ -12,5 +12,4 @@ angular.module('myapp', [
 ]).constant('VERSION', require('../../package.json').version);
 
 require('./service');
-require('./directive');
 require('./controller');
