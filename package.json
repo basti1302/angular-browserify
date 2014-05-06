@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Yet another example project with Angular, Browserify and Gulp",
   "repository": "https://github.com/basti1302/angular-browserify-seed",
+  "scripts": {
+    "test": "gulp"
+  },
   "dependencies": {
     "es5-shim": "^3.0.2",
     "jquery": "^2.1.1"
