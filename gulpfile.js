@@ -3,6 +3,7 @@ var browserify = require('browserify')
   , connect = require('gulp-connect')
   , gulp = require('gulp')
   , jshint = require('gulp-jshint')
+  , mocha = require('gulp-mocha')
   , ngmin = require('gulp-ngmin')
   , source = require('vinyl-source-stream')
   , streamify = require('gulp-streamify')
@@ -30,10 +31,19 @@ gulp.task('lint', function() {
   return gulp.src([
     'gulpfile.js',
     'app/js/**/*.js',
+    'test/**/*.js',
     '!app/js/third-party/**',
   ])
   .pipe(jshint('.jshintrc'))
   .pipe(jshint.reporter('default'))
+  ;
+});
+
+gulp.task('unit', function () {
+  return gulp.src([
+    'test/**/*.js'
+  ])
+  .pipe(mocha({ reporter: 'dot' }))
   ;
 });
 
@@ -81,9 +91,9 @@ gulp.task('watch', function() {
 });
 
 gulp.task('fast', ['clean'], function() {
-  gulp.start('lint', 'browserify');
+  gulp.start('lint', 'unit', 'browserify');
 });
 
 gulp.task('default', ['clean'], function() {
-  gulp.start('lint', 'browserify', 'browserify-min');
+  gulp.start('lint', 'unit', 'browserify', 'browserify-min');
 });
