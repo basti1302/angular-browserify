@@ -44,9 +44,19 @@ module.exports = function($scope, TodoService, $rootScope) {
       $scope.todo.title = backupForCancel.title;
       $scope.todo.due = backupForCancel.due;
       $scope.todo.text = backupForCancel.text;
+    } else {
+      // discard new todo, set active todo to some arbitrary todo
+      $scope.todo = TodoService.getTodos()[0];
+      $rootScope.$emit('set-active-todo', $scope.todo);
+      creatingNew = false;
     }
-    creatingNew = false;
     $scope.editMode = false;
+  };
+
+  $scope.remove = function() {
+    TodoService.remove($scope.todo);
+    // set active todo to some arbitrary todo
+    $scope.todo = TodoService.getTodos()[0];
     $rootScope.$emit('set-active-todo', $scope.todo);
   };
 

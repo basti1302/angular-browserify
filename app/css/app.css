@@ -96,16 +96,12 @@ button {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-}
-
-.btn-primary {
   color: #ccc;
-  font-weight: bold;
-  background-color: #304050;
+  background-color: #203040;
   border-color: #102030;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active  {
+.btn:hover, .btn:focus, .btn:active  {
   color: #fff;
   border-color: #102030;
   background-color: #506070;

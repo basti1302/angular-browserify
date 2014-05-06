@@ -38,6 +38,11 @@ module.exports = function() {
     todos.push(todo);
   };
 
+  this.remove = function(todo) {
+    todos = todos.filter(function(t) { return t !== todo; });
+    console.log(todos);
+  };
+
   function createDate(year, month, day, hour, minute) {
     var now = new Date();
     return new Date(
