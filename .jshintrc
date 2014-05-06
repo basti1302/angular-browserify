@@ -34,10 +34,14 @@
     "angular": true,
     "before": true,
     "beforeEach": true,
+    "browser": true,
+    "by": true,
     "describe": true,
+    "element": true,
+    "expect": true,
     "it": true,
     "log": true,
     "mocha": true,
-    "Notify": true
+    "protractor": true
   }
 }

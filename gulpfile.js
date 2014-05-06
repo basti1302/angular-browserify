@@ -5,6 +5,7 @@ var browserify = require('browserify')
   , jshint = require('gulp-jshint')
   , mocha = require('gulp-mocha')
   , ngmin = require('gulp-ngmin')
+  , protractor = require('gulp-protractor').protractor
   , source = require('vinyl-source-stream')
   , streamify = require('gulp-streamify')
   , uglify = require('gulp-uglify')
@@ -75,11 +76,21 @@ gulp.task('browserify-min', ['ngmin'], function() {
   ;
 });
 
-gulp.task('server', function() {
+gulp.task('server', ['browserify'], function() {
   connect.server({
     root: 'app',
     livereload: true,
   });
+});
+
+gulp.task('e2e', ['server'], function() {
+  return gulp.src(['./test/e2e/**/*.js'])
+  .pipe(protractor({
+    configFile: 'protractor.conf.js',
+    args: ['--baseUrl', 'http://127.0.0.1:8080'],
+  }))
+  .on('error', function(e) { throw e; })
+  ;
 });
 
 gulp.task('watch', function() {
@@ -96,5 +107,5 @@ gulp.task('fast', ['clean'], function() {
 });
 
 gulp.task('default', ['clean'], function() {
-  gulp.start('lint', 'unit', 'browserify', 'browserify-min');
+  gulp.start('lint', 'unit', 'browserify', 'browserify-min', 'e2e');
 });
