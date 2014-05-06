@@ -1,22 +1,15 @@
 'use strict';
 
-module.exports = function($scope, TodoService, $rootScope) {
-
-  $scope.activeTodo = TodoService.getTodos()[0];
+module.exports = function($scope, TodoService) {
 
   $scope.getTodos = TodoService.getTodos.bind(TodoService);
 
   $scope.select = function(todo) {
-    $scope.activeTodo = todo;
-    $rootScope.$emit('select-active-todo', todo);
+    $scope.$parent.todo = todo;
   };
 
-  $rootScope.$on('set-active-todo', function(evnt, todo) {
-    $scope.activeTodo = todo;
-  });
-
   $scope.getCssClass = function(todo) {
-    if (todo === $scope.activeTodo) {
+    if (todo === $scope.$parent.todo) {
       return ['sidebar-item-active'];
     } else {
       return ['sidebar-item-inactive'];

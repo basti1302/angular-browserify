@@ -2,68 +2,60 @@
 
 var angular = require('angular');
 
-module.exports = function($scope, TodoService, $rootScope) {
+module.exports = function($scope, TodoService) {
 
   var backupForCancel;
   var creatingNew = false;
 
-  $scope.todo = TodoService.getTodos()[0];
   $scope.editMode = false;
 
   $scope.getTodo = function() {
-    return $scope.todo;
+    return $scope.$parent.todo;
   };
 
   $scope.create = function() {
-    $scope.todo = TodoService.create();
+    $scope.$parent.todo = TodoService.create();
     backupForCancel = null;
     creatingNew = true;
     $scope.editMode = true;
-    $rootScope.$emit('set-active-todo', null);
   };
 
   $scope.edit = function() {
-    backupForCancel = angular.copy($scope.todo);
+    if ($scope.editMode) {
+      return;
+    }
+    backupForCancel = angular.copy($scope.$parent.todo);
     creatingNew = false;
     $scope.editMode = true;
   };
 
   $scope.save = function() {
     if (creatingNew) {
-      TodoService.insert($scope.todo);
+      TodoService.insert($scope.$parent.todo);
     }
     $scope.editMode = false;
     creatingNew = false;
     backupForCancel = null;
-    $rootScope.$emit('set-active-todo', $scope.todo);
   };
 
   $scope.cancel = function() {
     if (!creatingNew) {
       // rollback edits
-      $scope.todo.title = backupForCancel.title;
-      $scope.todo.due = backupForCancel.due;
-      $scope.todo.text = backupForCancel.text;
+      $scope.$parent.todo.title = backupForCancel.title;
+      $scope.$parent.todo.due = backupForCancel.due;
+      $scope.$parent.todo.text = backupForCancel.text;
     } else {
       // discard new todo, set active todo to some arbitrary todo
-      $scope.todo = TodoService.getTodos()[0];
-      $rootScope.$emit('set-active-todo', $scope.todo);
+      $scope.$parent.todo = TodoService.getTodos()[0];
       creatingNew = false;
     }
     $scope.editMode = false;
   };
 
   $scope.remove = function() {
-    TodoService.remove($scope.todo);
+    TodoService.remove($scope.$parent.todo);
     // set active todo to some arbitrary todo
-    $scope.todo = TodoService.getTodos()[0];
-    $rootScope.$emit('set-active-todo', $scope.todo);
+    $scope.$parent.todo = TodoService.getTodos()[0];
   };
-
-  $rootScope.$on('select-active-todo', function(evnt, todo) {
-    if (!$scope.editMode) {
-      $scope.todo = todo;
-    }
-  });
 
 };

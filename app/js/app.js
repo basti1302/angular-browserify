@@ -18,6 +18,7 @@ myApp.config(function($routeProvider) {
 
   $routeProvider.when('/todos', {
     templateUrl: 'views/todos.html',
+    controller: 'TodoCtrl',
   })
   .when('/imprint', {
     templateUrl: 'views/imprint.html',
