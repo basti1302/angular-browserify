@@ -1,0 +1,62 @@
+<div class="grid-20 grid-parent">
+  <div class="margins rounded-box text-on-blue">
+    <div class="sidebar-heading sidebar-heading-skin dark-blue-bg">Your Todos</div>
+    <div ng-controller="TodoListCtrl">
+      <a ng-repeat="todo in getTodos()"
+        ng-click="select(todo)"
+        class="sidebar-item-borders sidebar-item dark-blue-bg"
+        ng-class="getCssClass(todo)"
+      >
+        <span ng-bind="todo.title"></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div ng-controller="EditTodoCtrl" class="grid-80 grid-parent">
+  <form novalidate role="form">
+
+    <div class="margins padding rounded-box dark-blue-bg text-on-blue">
+      <div ng-show="!editMode">
+        <span ng-bind="getTodo().title" class="current-item"/>
+      </div>
+      <div ng-show="editMode">
+        <input
+          type="text"
+          ng-model="todo.title"
+          class="current-item current-item-edit"
+        />
+      </div>
+    </div>
+
+    <div class="margins padding rounded-box medium-blue-bg text-on-blue">
+      <span>Due:</span>
+        {{ todo.due | date : 'short' }}
+    </div>
+
+    <div
+      ng-show="!editMode"
+      class="margins padding rounded-box todo-text"
+    >
+      <span ng-bind="todo.text"></span>
+    </div>
+    <div
+      ng-show="editMode"
+    >
+      <textarea ng-model="todo.text" class="margins padding todo-text todo-text-edit"></textarea>
+    </div>
+
+    <div ng-show="!editMode">
+      <span class="span-save">
+        <button ng-click="edit()" class="btn btn-primary">Edit</button>
+        <button ng-click="create()" class="btn btn-primary">New</button>
+      </span>
+    </div>
+    <div ng-show="editMode">
+      <span class="span-save">
+        <button ng-click="cancel()" class="btn btn-primary">Cancel</button>
+        <button ng-click="save()" class="btn btn-primary">Save</button>
+      </span>
+    </div>
+  </form>
+</div>

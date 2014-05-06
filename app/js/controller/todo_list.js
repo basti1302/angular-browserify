@@ -1,7 +1,5 @@
 'use strict';
 
-var angular = require('angular');
-
 module.exports = function($scope, TodoService, $rootScope) {
 
   $scope.activeTodo = TodoService.getTodos()[0];
@@ -21,7 +19,7 @@ module.exports = function($scope, TodoService, $rootScope) {
     if (todo === $scope.activeTodo) {
       return ['sidebar-item-active'];
     } else {
-      return [];
+      return ['sidebar-item-inactive'];
     }
   };
 

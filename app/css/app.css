@@ -164,6 +164,9 @@ button {
   text-decoration: inherit;
 }
 
+.sidebar-item-inactive {
+  cursor: pointer;
+}
 
 /* highlight hovered item a bit... */
 a:hover.sidebar-item {
@@ -183,6 +186,7 @@ a:hover.sidebar-item-active {
   border-bottom-color: #203040;
   background-image: none;
   background-color: #102030;
+  cursor: default;
 }
 
 /* in headline */
