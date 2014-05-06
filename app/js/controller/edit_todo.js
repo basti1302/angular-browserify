@@ -9,10 +9,6 @@ module.exports = function($scope, TodoService) {
 
   $scope.editMode = false;
 
-  $scope.getTodo = function() {
-    return $scope.$parent.todo;
-  };
-
   $scope.create = function() {
     $scope.$parent.todo = TodoService.create();
     backupForCancel = null;
