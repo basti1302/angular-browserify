@@ -9,7 +9,8 @@ var chai = require('chai')
 
 chai.use(sinonChai);
 
-var EditTodoCtrlSandbox = sandbox.load('../../app/js/controller/edit_todo.js', {
+var EditTodoCtrlSandbox = sandbox.load(
+  '../../../app/js/controller/edit_todo.js', {
   requires: {
     angular: {
       copy: sinon.stub().returns({ title: 'the clone' })

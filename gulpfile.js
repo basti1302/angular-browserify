@@ -41,7 +41,7 @@ gulp.task('lint', function() {
 
 gulp.task('unit', function () {
   return gulp.src([
-    'test/**/*.js'
+    'test/unit/**/*.js'
   ])
   .pipe(mocha({ reporter: 'dot' }))
   ;
@@ -87,6 +87,7 @@ gulp.task('watch', function() {
   gulp.watch([
     'app/js/**/*.js',
     '!app/js/third-party/**',
+    'test/**/*.js',
   ], ['fast']);
 });
 
