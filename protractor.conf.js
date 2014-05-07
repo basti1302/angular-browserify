@@ -1,8 +1,6 @@
 // An example configuration file.
 exports.config = {
 
-  baseUrl: 'http://127.0.0.1:8080/',
-
   // Do not start a Selenium Standalone sever - only run this using chrome.
   chromeOnly: true,
   chromeDriver: './node_modules/protractor/selenium/chromedriver',
