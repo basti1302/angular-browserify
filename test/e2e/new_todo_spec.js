@@ -3,6 +3,7 @@ var TodoPage = require('./pages/todo_page');
 describe('The todo app (creating a new todo)', function() {
 
   var ptor;
+  var driver;
   var todoPage;
 
   beforeEach(function() {
@@ -11,6 +12,7 @@ describe('The todo app (creating a new todo)', function() {
     ptor = protractor.getInstance();
     // see comment in test/e2e/list_todo_spec.js
     ptor.ignoreSynchronization = true;
+    driver = browser.driver;
   });
 
   it('should switch to edit-mode when creating a new todo', function() {
@@ -31,7 +33,8 @@ describe('The todo app (creating a new todo)', function() {
     todoPage.cancel();
     todoPage.isInDisplayMode();
     expect(todoPage.sidebarItems().count()).toEqual(4);
-    // TODO Check that 'new title' and 'new text' are not on the page.
+    todoPage.doesNotContainText('new title');
+    todoPage.doesNotContainText('new text');
   });
 
   it('should create a new todo and save', function() {

@@ -3,6 +3,8 @@
  */
 var TodoPage = function() {
 
+  var driver = browser.driver;
+
   this.title = element(by.css('.current-item'));
   this.dueDate = element(by.binding('todo.due'));
   this.text = element(by.binding('todo.text'));
@@ -81,6 +83,25 @@ var TodoPage = function() {
     expect(this.cancelButton.isDisplayed()).toEqual(true);
     expect(this.saveButton.isDisplayed()).toEqual(true);
   };
+
+  this.containsText = function(text) {
+    checkText(text, function(result) {
+      expect(result).toBe(true);
+    });
+  };
+
+  this.doesNotContainText = function(text) {
+    checkText(text, function(result) {
+      expect(result).toBe(false);
+    });
+  };
+
+  function checkText(text, fn) {
+    driver
+    .isElementPresent({
+      xpath: '//*[contains(text(), \'' + text + '\')]'
+    }).then(fn);
+  }
 };
 
 function enter(field, text) {
