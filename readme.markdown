@@ -15,6 +15,7 @@ It also comes with a basic `gulpfile` that includes:
 * a static asset server (gulp-connect) and
 * live reload support.
 
+<!--
 Angular and Browserify
 ----------------------
 
@@ -24,3 +25,4 @@ Build
 -----
 
 TODO: Explain useful gulp tasks.
+-->
