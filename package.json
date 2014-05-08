@@ -4,7 +4,8 @@
   "description": "Yet another example project with Angular, Browserify and Gulp",
   "repository": "https://github.com/basti1302/angular-browserify-seed",
   "scripts": {
-    "test": "gulp"
+    "postinstall": "./node_modules/protractor/bin/webdriver-manager update",
+    "test": "./node_modules/gulp/bin/gulp.js"
   },
   "dependencies": {
     "es5-shim": "^3.0.2",
