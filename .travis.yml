@@ -5,3 +5,4 @@ node_js:
 
 before_script:
   - npm install -g phantomjs
+  - cp protractor.conf.js.travis protractor.conf.js

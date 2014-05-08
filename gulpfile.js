@@ -90,6 +90,11 @@ gulp.task('e2e', ['server'], function() {
     args: ['--baseUrl', 'http://127.0.0.1:8080'],
   }))
   .on('error', function(e) { throw e; })
+  .on('end', function() {
+    console.log('End-to-end tests finished, ' +
+      'shutting down gulp-connect server.');
+    connect.serverClose();
+  })
   ;
 });
 

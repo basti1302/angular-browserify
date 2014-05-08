@@ -1,10 +1,9 @@
 exports.config = {
 
-  chromeOnly: true,
-  chromeDriver: './node_modules/protractor/selenium/chromedriver',
+  seleniumAddress: 'http://0.0.0.0:4444/wd/hub',
 
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'phantomjs'
   },
 
   specs: ['test/e2e/**/*_spec.js'],
