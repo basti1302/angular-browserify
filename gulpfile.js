@@ -22,6 +22,8 @@ var browserify = require('browserify')
  * background.
  */
 
+var liveReload = true;
+
 gulp.task('clean', function() {
   return gulp.src(['./app/ngmin', './app/dist'], { read: false })
   .pipe(clean())
@@ -79,7 +81,7 @@ gulp.task('browserify-min', ['ngmin'], function() {
 gulp.task('server', ['browserify'], function() {
   connect.server({
     root: 'app',
-    livereload: true,
+    livereload: liveReload,
   });
 });
 
@@ -112,5 +114,6 @@ gulp.task('fast', ['clean'], function() {
 });
 
 gulp.task('default', ['clean'], function() {
+  liveReload = false;
   gulp.start('lint', 'unit', 'browserify', 'browserify-min', 'e2e');
 });
