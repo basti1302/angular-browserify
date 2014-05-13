@@ -42,30 +42,6 @@ input {
   border-radius: 4px;
 }
 
-.form-control {
-  display: block;
-  width: 100%;
-  height: 34px;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #777;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}
-
-.form-control:focus {
-  border-color: #506070;
-  outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(32, 48, 64, 0.6);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(32, 48, 64, 0.6);
-}
-
 button {
   margin: 0em;
   font: -webkit-small-control;
@@ -208,45 +184,8 @@ a:hover.sidebar-item-active {
   width: 97%;
 }
 
-/*
-.box-shadow-inset {
-  -webkit-box-shadow: inset 1px 1px 2px 0px black;
-     -moz-box-shadow: inset 1px 1px 2px 0px black;
-          box-shadow: inset 1px 1px 2px 0px black;
-}
-.todo-text {
-  height: 200px;
-  overflow: auto;
-  margin-bottom: 1em;
-  background-color: #eee;
-  width: 100%;
-}
-*/
-
 .footer {
   font-size: small;
   width: 100%;
   text-align: center;
-}
-
-.initially-invisible {
-  display: none;
-}
-
-.create-conv-anim.ng-hide-add, .create-conv-anim.ng-hide-remove {
-  -webkit-transition:all linear 0.4s;
-     -moz-transition:all linear 0.4s;
-       -o-transition:all linear 0.4s;
-          transition:all linear 0.4s;
-  display:block!important;
-}
-
-.create-conv-anim.ng-hide-add.ng-hide-add-active,
-.create-conv-anim.ng-hide-remove {
-  opacity:0;
-}
-
-.create-conv-anim.ng-hide-add,
-.create-conv-anim.ng-hide-remove.ng-hide-remove-active {
-  opacity:1;
 }
