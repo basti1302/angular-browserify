@@ -9,7 +9,6 @@
     "test": "./node_modules/gulp/bin/gulp.js"
   },
   "dependencies": {
-    "es5-shim": "^3.0.2",
     "jquery": "^2.1.1"
   },
   "devDependencies": {
@@ -33,8 +32,6 @@
   },
   "browser": {
     "angular": "./app/js/third-party/angular/angular-index.js",
-    "angular-route": "./app/js/third-party/angular/angular-route.min.js",
-    "es5-sham": "./node_modules/es5-shim/es5-sham.min.js",
-    "es5-shim": "./node_modules/es5-shim/es5-shim.min.js"
+    "angular-route": "./app/js/third-party/angular/angular-route.min.js"
   }
 }
