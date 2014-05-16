@@ -7,11 +7,11 @@ This is a small example/seed project for using AngularJS with Browserify. It dem
 
 It also comes with a basic `gulpfile` that includes:
 
-* running JSHint to lint JavaScript sources,
-* running unit tests via mocha,
+* running ESlint to lint JavaScript sources,
+* running unit tests via Mocha,
 * processing sources with Browserify (to create a non-minfied Browserify bundle),
 * ngmin & uglify (to create an ngmin-processed and minified Browserify bundle),
-* end-to-end tests with protractor,
+* end-to-end tests with Protractor,
 * a static asset server (gulp-connect) and
 * live reload support.
 
