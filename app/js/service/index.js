@@ -1,6 +1,6 @@
 'use strict';
 
-var myApp = require('angular').module('myapp');
+var app = require('angular').module('todoApp');
 
-myApp.service('ImprintService', require('./imprint'));
-myApp.service('TodoService', require('./todos'));
+app.service('ImprintService', require('./imprint'));
+app.service('TodoService', require('./todos'));

@@ -1,9 +1,9 @@
 'use strict';
 
-var myApp = require('angular').module('myapp');
+var app = require('angular').module('todoApp');
 
-myApp.controller('EditTodoCtrl', require('./edit_todo'));
-myApp.controller('FooterCtrl', require('./footer'));
-myApp.controller('TodoCtrl', require('./todo'));
-myApp.controller('TodoListCtrl', require('./todo_list'));
-myApp.controller('ImprintCtrl', require('./imprint'));
+app.controller('EditTodoCtrl', require('./edit_todo'));
+app.controller('FooterCtrl', require('./footer'));
+app.controller('TodoCtrl', require('./todo'));
+app.controller('TodoListCtrl', require('./todo_list'));
+app.controller('ImprintCtrl', require('./imprint'));

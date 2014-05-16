@@ -4,14 +4,14 @@ require('jquery');
 var angular = require('angular');
 require('angular-route');
 
-var myApp = angular.module('myapp', [ 'ngRoute' ]);
+var app = angular.module('todoApp', [ 'ngRoute' ]);
 
-myApp.constant('VERSION', require('../../package.json').version);
+app.constant('VERSION', require('../../package.json').version);
 
 require('./service');
 require('./controller');
 
-myApp.config(function($routeProvider) {
+app.config(function($routeProvider) {
 
   $routeProvider.when('/todos', {
     templateUrl: 'views/todos.html',
