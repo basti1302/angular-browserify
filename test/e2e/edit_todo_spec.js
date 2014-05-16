@@ -1,3 +1,5 @@
+'use strict';
+
 var TodoPage = require('./pages/todo_page');
 
 describe('The todo app (editing)', function() {

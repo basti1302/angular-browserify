@@ -1,15 +1,16 @@
+'use strict';
+
 var browserify = require('browserify')
   , clean = require('gulp-clean')
   , connect = require('gulp-connect')
+  , eslint = require('gulp-eslint')
   , gulp = require('gulp')
-  , jshint = require('gulp-jshint')
   , mocha = require('gulp-mocha')
   , ngmin = require('gulp-ngmin')
   , protractor = require('gulp-protractor').protractor
   , source = require('vinyl-source-stream')
   , streamify = require('gulp-streamify')
-  , uglify = require('gulp-uglify')
-  ;
+  , uglify = require('gulp-uglify');
 
 /*
  * Useful tasks:
@@ -26,8 +27,7 @@ var liveReload = true;
 
 gulp.task('clean', function() {
   return gulp.src(['./app/ngmin', './app/dist'], { read: false })
-  .pipe(clean())
-  ;
+  .pipe(clean());
 });
 
 gulp.task('lint', function() {
@@ -37,36 +37,32 @@ gulp.task('lint', function() {
     'test/**/*.js',
     '!app/js/third-party/**',
   ])
-  .pipe(jshint('.jshintrc'))
-  .pipe(jshint.reporter('default'))
-  ;
+  .pipe(eslint())
+  .pipe(eslint.format());
 });
 
 gulp.task('unit', function () {
   return gulp.src([
     'test/unit/**/*.js'
   ])
-  .pipe(mocha({ reporter: 'dot' }))
-  ;
+  .pipe(mocha({ reporter: 'dot' }));
 });
 
-gulp.task('browserify', function() {
+gulp.task('browserify', ['lint', 'unit'], function() {
   return browserify('./app/js/app.js')
   .bundle({ debug: true })
   .pipe(source('app.js'))
   .pipe(gulp.dest('./app/dist/'))
-  .pipe(connect.reload())
-  ;
+  .pipe(connect.reload());
 });
 
-gulp.task('ngmin', function() {
+gulp.task('ngmin', ['lint', 'unit'], function() {
   return gulp.src([
     'app/js/**/*.js',
     '!app/js/third-party/**',
   ])
   .pipe(ngmin())
-  .pipe(gulp.dest('./app/ngmin'))
-  ;
+  .pipe(gulp.dest('./app/ngmin'));
 });
 
 gulp.task('browserify-min', ['ngmin'], function() {
@@ -74,8 +70,7 @@ gulp.task('browserify-min', ['ngmin'], function() {
   .bundle()
   .pipe(source('app.min.js'))
   .pipe(streamify(uglify({ mangle: false })))
-  .pipe(gulp.dest('./app/dist/'))
-  ;
+  .pipe(gulp.dest('./app/dist/'));
 });
 
 gulp.task('server', ['browserify'], function() {
@@ -93,11 +88,8 @@ gulp.task('e2e', ['server'], function() {
   }))
   .on('error', function(e) { throw e; })
   .on('end', function() {
-    console.log('End-to-end tests finished, ' +
-      'shutting down gulp-connect server.');
     connect.serverClose();
-  })
-  ;
+  });
 });
 
 gulp.task('watch', function() {
@@ -110,10 +102,10 @@ gulp.task('watch', function() {
 });
 
 gulp.task('fast', ['clean'], function() {
-  gulp.start('lint', 'unit', 'browserify');
+  gulp.start('browserify');
 });
 
 gulp.task('default', ['clean'], function() {
   liveReload = false;
-  gulp.start('lint', 'unit', 'browserify', 'browserify-min', 'e2e');
+  gulp.start('browserify', 'browserify-min', 'e2e');
 });

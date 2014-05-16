@@ -1,8 +1,7 @@
 'use strict';
 
 var chai = require('chai')
-  , expect = chai.expect
-  ;
+  , expect = chai.expect;
 
 var ImprintServiceModule = require('../../../app/js/service/imprint.js');
 

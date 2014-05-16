@@ -1,8 +1,7 @@
 'use strict';
 
 var chai = require('chai')
-  , expect = chai.expect
-  ;
+  , expect = chai.expect;
 
 var TodoListCtrlModule = require('../../../app/js/controller/todo_list.js');
 
@@ -10,7 +9,6 @@ describe('The TodoListCtrl', function() {
 
   var todo;
   var $scope;
-  var TodoListCtrl;
 
   beforeEach(function() {
     todo = {

@@ -4,8 +4,7 @@ var chai = require('chai')
   , expect = chai.expect
   , sandbox = require('sandboxed-module')
   , sinon = require('sinon')
-  , sinonChai = require('sinon-chai')
-  ;
+  , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
@@ -23,7 +22,6 @@ describe('The EditTodoCtrl\'s', function() {
 
   var todo;
   var $scope;
-  var TodoListCtrl;
   var TodoService;
 
   beforeEach(function() {

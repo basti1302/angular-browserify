@@ -1,8 +1,7 @@
 'use strict';
 
 var chai = require('chai')
-  , expect = chai.expect
-  ;
+  , expect = chai.expect;
 
 var TodoServiceModule = require('../../../app/js/service/todos.js');
 

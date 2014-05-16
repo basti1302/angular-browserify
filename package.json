@@ -17,7 +17,7 @@
     "gulp": "^3.6.2",
     "gulp-clean": "^0.2.4",
     "gulp-connect": "^2.0.5",
-    "gulp-jshint": "^1.5.5",
+    "gulp-eslint": "^0.1.6",
     "gulp-mocha": "^0.4.1",
     "gulp-ngmin": "^0.2.0",
     "gulp-protractor": "0.0.7",
