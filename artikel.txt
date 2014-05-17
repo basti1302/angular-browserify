@@ -1,0 +1,295 @@
+Angular und Browserify
+
+- Kurzer Pitch, warum Browserify toll ist
+- Ein Absatz zum Beispiel-Repository und gulp, eins zu den wichtigsten Targets und Features, die der gulpfile bietet
+- TODO Knackiger Titel
+- TODO Irgendwo (ziemlich früh) mal grundsätzlich erklären, dass Browserify bei einem Entry Point anfängt und ausgehend von da alle require-Statements auflöst und rekursiv traversiert, das ganze Zeug in eine Datei pumpt, die dann im Browser lauffähig ist.
+
+h1 Angular und Browserify
+
+Mit <a href="http://browserify.org/">Browserify</a> lassen sich client-seitige JavaScript-Projekte mit CommonJS-Modulen strukturieren, obwohl CommonJS-Module eigentlich im Browser nicht lauffähig sind. In einem Build-Step transformiert man daher mit Browserify alle Module und ihre transitiven Abhängigkeiten in eine einzige JavaScript-Datei, die im Browser lauffähig ist. Browserify lässt sich auch in AngularJS-Projekten hervorragend einsetzen. Wie, zeigt dieser Artikel.
+
+h2 Warum Browserify?
+
+Der größte Mehrwert beim Einsatz von Browserify ist die Modularisierung des Codes &mdash; JavaScript bietet bis einschließlich EcmaScript 5 kein in die Sprache integriertes Modulkonzept. (Ab EcmaScript 6 wird es native JavaScript-Module geben.) Browserify/CommonJS steht damit in direkter Konkurenz zu AMD mit Implementierungen wie RequireJS. Was besser ist, muss jeder für sich selbst entscheiden. Meiner Meinung nach bietet Browserify eine ganze Reihe von Vorteilen, außderdem sind CommonJS-Module syntaktisch etwas gefälliger als AMD-Module.
+
+Einer der Vorteile von Browserify (wenn nicht sogar <emph>der</emph> Hauptvorteil), ist der direkte Zugriff auf die <a href="https://www.npmjs.org/">npm</a>-Registry. Diese hält eine Vielzahl von JavaScript-Modulen für alle Lebenslagen bereit. Wer npm bisher nur als Paket-Manager für serverseitiges JavaScript (sprich Node.js) wahrgenommen hat, liegt damit nicht mehr ganz richtig &mdash; die npm-Registry enthält bereits eine große Anzahl von Paketen für den Browser. Klassiker wie <a href="https://www.npmjs.org/package/jquery">jQuery</a>, <a href="https://www.npmjs.org/package/jquery-ui">jQuery-UI</a> und <a href="https://www.npmjs.org/package/es5-shim">es5-shim</a> sind per npm erhältlich. Und es werden stetig mehr, da vermehrt Frontend-Projekte ihre Releases per npm bereitstellen (teilweise zusätzlich zu Bower und normalen Downloads). Selbst Pakete, die eigentlich nicht (oder nicht ausschließlich) für den Einsatz im Browser gedacht sind, lassen sich dank Browserify oft in einem Frontend-Projekt nutzen. Zu guter Letzt lassen sich auch fast alle Module aus dem Node.js-Core benutzen und werden von Browserify durch Browser-kompatible Shims ersetzt. 
+
+Browserify ist damit eine sehr interessante Alternative zu anderen gängigen Projekt-Setups (RequireJS, Script-Tags, etc.)
+
+Setzt man Browserify ein, arbeitet man mit <a href="http://wiki.commonjs.org/wiki/Modules/1.0">CommonJS-Modulen</a>, inklusive der CommonJS-Konstrukte <code>exports/module.exports</code> und <code>require</code>. Möchte man nun außerdem AngularJS einsetzen, muss man sich mit der Frage beschäftigen, wie man CommonJS-Module und das Dependency-System von AngularJS miteinander kombiniert. Dazu gibt es bereits einige Beiträge. Der interessanteste davon ist vermutlich eine <a href="http://benclinkinbeard.com/talks/2014/ng-conf/">Präsentation</a> von Ben Clinkinbeard von der ng-conf 2014. Einige der Ideen aus dieser Präsentation finden sich hier wieder.
+
+h2 Code
+
+Das <a href="https://github.com/basti1302/angular-browserify">Beispiel-Repository</a> zu diesem Artikel ist auf GitHub verfügbar. Wer lieber Code statt Prosa liest, wird dort fündig. Die Beispiel-Anwendung, wie sollte es anders sein, ist eine App zum Verwalten von Todos.
+
+h2 AngularJS einbinden
+
+Bevor wir anfangen, unsere eigene App zu implementieren, müssen wir erstmal die Angular-Bibliotheken selbst einbinden. Angular Core ist als <a href="https://www.npmjs.org/package/angular">Package</a> in der npm-Registry vorhanden und wird von Ben Clinkinbeard gepflegt. Im Prinzip sollte es also reichen <code>npm install angular --save</code> auszuführen und im Code ein <code>var angular = require('angular');</code> an geeigneter Stelle einzufügen. Funktioniert auch soweit, aber spätestens dann, wenn man weitere Angular-Module (z. B. angular-route oder angular-animate) einsetzen möchte, stellt sich die Benutzung von Bens Paket als suboptimal heraus: Sowohl angular-route als auch angular-animate gibt es auch auf npm, die Pakete werden aber alle von verschiedenen Leuten gepflegt &mdash; oder eben auch nicht gepflegt. Während Bens Angular-Core-Paket mittlerweile Angular-Version 1.2.16 bietet, sind die anderen Pakete älter und es nicht immer sofort ersichtlich, welche Angular-Version überhaupt hinter dem npm-Paket steckt. Ein ziemliches Durcheinander, das sich vermutlich erst auflösen lässt, wenn (falls) das Angular-Team selbst die einzelnen Angular-Pakete über npm verfügbar macht.
+
+Mit Browserify ist es zum Glück sehr einfach, Angular selbst einzubinden. Wir können zum Beispiel einfach die benötigten Dateien (angular.js, angular.min.js sowei alle weiteren benötigten Module, z. B. angular-route.js und angular-route.min.js) in der gewünschten Version in einem dedizierten Verzeichnis (bspw. <code>app/js/third-party/angular/</code>) ablegen und noch folgende Datei hinzufügen
+
+<code>angular-index.js:</code>
+<pre>
+require('./angular.min.js');
+
+module.exports = angular;
+</pre>
+
+Das entspricht exakt dem Code in Ben Clinkinbeards Modul. Möchte man zur Entwicklungszeit lieber die nicht-minifiziert Variante von Angular einbinden, lässt sich das in dem require-Statement schnell ändern.
+
+In der <code>package.json</code> fügen wir noch folgendes hinzu: 
+<pre>
+  "browser": {
+    "angular": "./app/js/third-party/angular/angular-index.js",
+    "angular-route": "./app/js/third-party/angular/angular-route.min.js"
+  }
+</pre>
+
+Damit ist sind sowohl Angular als auch angular-route verfügbar. Der Vorteil bei diesem Ansatz ist, dass man absolute Kontrolle über die eingesetzten Versionen hat und nicht davon abhängig ist, wann und ob irgendwer die aktuellste Version von angular, angular-router, etc. auf npm bereitstellen.
+
+h2 Angular und CommonJS miteinander verheiraten - ein Stück in drei Akten
+
+In einem "normalen" Angular-Projekt (ohne Browserify) enthält üblicherweise jede JavaScript-Datei eine Angular-Entität, also entweder Controller, einen Service oder einen Provider etc. Der typische Angular-Boilerplate-Code um die Deklaration z. B. eines Controllers einzuleiten, könnte z. B. so aussehen:
+
+<code>app/js/controller/todo.js</code>:
+<pre>
+(function() {
+'use strict';
+  angular
+  .module('todoApp')
+  .controller('TodoCtrl', function($scope, TodoService) {
+  });
+})();
+</pre>
+
+Im einfachsten Fall werden alle Einzeldateien dann per Script-Tag in der HTML-Datei eingebunden (oder man betreibt etwas mehr Aufwand und konkateniert die Dateien, so dass man mit einem Script-Tag auskommt).
+
+<code>app/index.html</code>:
+<pre>
+...
+<script src="/app/js/service/todos.js" type="text/javascript"></script>
+<script src="/app/js/service/imprint.js" type="text/javascript"></script>
+<script src="/app/js/controller/edit_todo.js" type="text/javascript"></script>
+<script src="/app/js/controller/todo.js" type="text/javascript"></script>
+<script src="/app/js/controller/todo_listjs" type="text/javascript"></script>
+<script src="/app/js/controller/imprint.js" type="text/javascript"></script>
+<script src="/app/js/controller/footer.js" type="text/javascript"></script>
+// viele weitere script tags
+...
+</pre>
+
+h3 Der naive Ansatz
+
+Dies könnte man theoretisch auch beim Einsatz von Browserify ähnlich handhaben.
+
+Das entsprechende CommonJS-Modul sähe dann einfach so aus:
+
+<code>app/js/controller/todo.js</code>:
+<pre>
+'use strict';
+angular
+.module('todoApp')
+.controller('TodoCtrl', function($scope, TodoService) {
+});
+</pre>
+
+Der einzige Unterschied im Controller ist, dass wir auf die IFFE verzichten können - CommonJS-Module sind per se voneinander isoliert und greifen nicht auf den globalen Scope zu. Außerdem erzeugt Browserify grundsätzlich aus allen benötigten CommonJS-Modulen eine einzige Datei, die vielen Script-Tags im HTML fallen also weg. Da der Browserify-Prozess aber immer von einem Einstiegspunkt ausgeht, und von dort aus allen require-Statements folgt, verlagert sich diese Auflistung nur in die JavaScript-Datei, die wir als Einstiegspunkt wählen. Dafür bietet sich die Datei an, in der das AngularJS-Modul selbst deklariert wird:
+
+<code>app/js/app.js</code>:
+<pre>
+'use strict';
+
+var angular = require('angular');
+var app = angular.module('todoApp', [ 'ngRoute' ]);
+
+require('./service/todos');
+require('./service/imprint');
+require('./controller/edit_todo');
+require('./controller/todo');
+require('./controller/todo_list');
+require('./controller/imprint');
+require('./controller/footer');
+// ... weitere require-Statements, eins pro Datei
+</pre>
+
+Viel gewonnen haben wir dadurch, ehrlich gesagt, nicht. Das müsste doch besser gehen.
+
+h3 Eine <code>index.js</code> pro Source-Verzeichnis
+
+Der erste Schönheitsfehler, den wir beseitigen, ist die lange Liste von <code>require</code>-Statements in <code>app.js</code>. In <code>app.js</code> geben wir nur noch die die <emph>Verzeichnisse</emph> an, aus denen wir Module importieren wollen:
+
+<code>app/js/app.js</code>:
+<pre>
+'use strict';
+
+var angular = require('angular');
+var app = angular.module('todoApp', []);
+
+// ein require-Statement pro Unterverzeichnis, statt eins pro Datei
+require('./service');
+require('./controller');
+</pre>
+
+Übergibt man der <code>require</code>-Funktion als Argument ein Verzeichnis statt einer Datei, wird in diesem Verzeichnis automatisch die Datei <code>index.js</code> gesucht, und diese eingebunden. Wir legen also in jedem Verzeichnis eine <code>index.js</code> an, in der wir festlegen, welche Dateien aus diesem Verzeichnis eingebunden werden sollen:
+
+<code>app/js/controller/index.js</code>:
+<pre>
+'use strict';
+
+require('./edit_todo');
+require('./footer');
+require('./todo');
+require('./todo_list');
+require('./imprint');
+</pre>
+
+Kleine Anmerkung am Rande: Über sinnvolle Ordner-Strukturen für Angular-Projekte wurde an vielen anderen Stelle schon ausgiebig diskutiert. Die hier gemachten Vorschläge sind unabhängig davon, ob man sein Ordner-Struktur technisch anlegt (controller, service, directive, ...) oder sich an der fachlichen Domäne orientiert.
+
+Damit haben wir schon mal ein bisschen mehr Ordnung geschaffen. Trotzdem benutzen wir Browserify immer noch primär als Werkzeug zur Skript-Konkatenierung &mdash; irgendwie unbefriedigend.
+
+h3. Wohin mit dem Angular-Boiler-Plate-Code?
+
+Unsere nächste Optimierung betrifft den üblichen Angular-Boiler-Plate-Code, um eine Angular-Entität (Controller, Service, ...) zu definieren: <code>angular.module('todoApp').controller('TodoCtrl', function($scope, TodoService) { ...</code>. Statt diesen Code in das jeweilige CommonJS-Modul zu schreiben, können wir das auch in der index.js abfrühstücken:
+
+<code>app/js/controller/index.js:</code>
+<pre>
+'use strict';
+
+var app = require('angular').module('todoApp');
+
+app.controller('EditTodoCtrl', require('./edit_todo'));
+app.controller('FooterCtrl', require('./footer'));
+app.controller('TodoCtrl', require('./todo'));
+app.controller('TodoListCtrl', require('./todo_list'));
+app.controller('ImprintCtrl', require('./imprint'));
+</pre>
+
+Die einzelnen CommonJS-Module kommen dann oft komplett ohne Angular-spezifischen Code aus:
+
+<code>app/js/controller/todo.js:</code>
+<pre>
+'use strict';
+
+module.exports = function($scope, TodoService) {
+  ...
+};
+</code>
+
+Das funtioniert natürlich nicht nur mit Controllern sondern genauso gut Services, Direktiven etc:
+
+<code>app/js/service/index.js:</code>
+<pre>
+'use strict';
+
+var app = require('angular').module('todoApp');
+
+app.service('ImprintService', require('./imprint'));
+app.service('TodoService', require('./todos'));
+</pre>
+
+<code>app/js/service/todos.js:</code>
+<pre>
+'use strict';
+
+module.exports = function() { 
+  var todos = [];
+
+  this.getTodos = function() {
+    return todos;
+  };
+};
+</pre>
+
+Das hat den netten Nebeneffekt, dass es einfacher ist, Unit-Tests für solche Module zu schreiben (siehe nächster Abschnitt). Außerdem wirkt der Code jetzt auch hübsch aufgeräumt.
+
+h2 Unit-Tests
+
+Dass die einzelnen CommonJS-Module nun nur noch aus einer Funktion bestehen, die über <code>module.exports</code> zurückgegeben wird und der Angular-Boilerplate-Code (<code>angular.module('modulname').controller/service/provider/...</code>) nicht mehr Bestandteil des Moduls ist, hat einen weiteren Vorteil: Wir sind beim Schreiben der Unit-Tests vollständig unabhängig von Angular, können also auch jedes beliebige Test-Framework einsetzen. Hier ein Beispiel mit <a href="http://visionmedia.github.io/mocha/">Mocha</a> (& <a href="http://chaijs.com/">Chai</a> & <a href="http://sinonjs.org/">Sinon</a>): 
+
+<code>test/unit/service/todos.js:</code>
+<pre>
+'use strict';
+
+var chai = require('chai')
+  , expect = chai.expect;
+
+var TodoServiceModule = require('../../../app/js/service/todos.js');
+
+describe('The TodoService', function() {
+
+  var TodoService;
+
+  beforeEach(function() {
+    TodoService = new TodoServiceModule();
+  });
+
+  it('should have some todos initially', function() {
+    var todos = TodoService.getTodos();
+    expect(todos.length).to.equal(4);
+    expect(todos[0].title).to.equal('Buy milk');
+  });
+});
+</pre>
+
+Da der getestete Service keine Angular-Abhängigkeiten mehr besitzt, wird auch im Test Angular an keiner Stelle erwähnt. Diese Tests lassen sich also völlig unabhängig von Angular und insbesondere unabhängig vom Browser durchführen. Sie werden einfach in Node.js ausgeführt.
+
+Solange das betreffende Modul keine globalen Angular-Funktionen benutzt, funktioniert das ganz hervorragend. Besitzt das zu testende Modul allerdings ein <code>require('angular')</code>-Statement, um z. B. <code>angular.copy</code> oder ähnliche Hilfsfunktionen zu benutzen, muss man etwas tiefer in die Trickkiste greifen. Hier kommt das npm-Modul <a href="https://github.com/felixge/node-sandboxed-module">sandboxed-module</a> zum Einsatz.
+
+Das oben bereits erwähnte Repository enthält ein Beispiel dafür. Beim Editieren von Todos wird per <a href="https://github.com/basti1302/angular-browserify/blob/master/app/js/controller/edit_todo.js#L23><code>angular.copy</code></a> eine Kopie des Todo-Objekts angelegt, damit die Original-Inhalte noch vorhanden sind, wenn die Anwenderin den Editiervorgang mit Cancel abbricht. Damit hat der Edit-Todo-Controller nun aber leider wieder eine AngularJS-Abhängigkeit - was durch das Statement <code>require('angular')</code> explizit gemacht wird.
+
+Bei der <a href="https://github.com/basti1302/angular-browserify/blob/master/test/unit/controller/edit_todo.js#L11-18">Vorbereitung</a> des Tests für diesen Code wird das zu testenden Moduls mit der Hilfe von sandboxed-module und sinon mit einem Mock von <code>angular.copy</code> versorgt.
+
+<pre>
+var EditTodoCtrlSandbox = sandbox.load(
+  '../../../app/js/controller/edit_todo.js', {
+  requires: {
+    angular: {
+      copy: sinon.stub().returns({ title: 'the clone' })
+    }
+  }
+});
+</pre>
+
+Die gemockte Version <code>angular.copy</code> wird dann in den <a href="https://github.com/basti1302/angular-browserify/blob/master/test/unit/controller/edit_todo.js#L73-96">Tests für das Editieren</a> verwendet.
+
+<pre>
+    it('should edit a todo', function() {
+      $scope.edit();
+      expect(EditTodoCtrlSandbox.required.angular.copy).to.have.been.calledOnce;
+      ...
+    });
+
+   it('should cancel the editing of an existing todo', function() {
+      $scope.edit();
+      $scope.$parent.todo.title = 'changed';
+      $scope.cancel();
+      expect($scope.$parent.todo.title).to.equal('the clone');
+      ...
+    });
+</pre>
+
+h2 Browserify & Watchify
+
+TODO Browserify und Watchify von der Kommandozeile ausführen, jeweils kurzes Beispiel, Parameter kurz erklären
+
+h2 Gulp-Build
+
+Browserify transformiert alle Module und ihre transitiven Abhängigkeiten in eine einzige JavaScript-Datei, die im Browser lauffähig ist.
+
+- Braucht man nicht unbedingt, siehe bin/browserify und bin/watchify, lässt sich auch gut bei npm scripts einhängen, ist dann aber ggf. ein bisschen plattformabhängig
+- Substack findets doof
+- gulp biett trotzdem Mehrwert
+- Auf Beispiel-gulpfile.js verweisen
+- Auf Standard-Tasks wie Linting, Unit-Tests, gehen wir hier nicht ein
+
+- browserify-Task
+- ngmin und browserify
+- server via connect-gulp (braucht man spätestens beim Einsatz von ng-view und ng-route) mit live-reload, sehr geil
+- server + protractor = awesome
+
+
+Müllhalde
+=========
+
+Beim den ersten Gehversuchen mit AngularJS macht man sich vermutlich über Modularisierung, Strukturierung des Codes und JavaScript-Build-Systeme relativ wenig Gedanken. Bei den ersten größeren Projekten, kommt man irgendwann an den Punkt, an dem es lohnend ist, sich mit der Thematik auseinanderzusetzen. Oft benutzt wird eine Kombination aus ngmin, Konkatenierung und Minifizierung, um den eigenen Code in eine handliche, produktionsreife Form zu bringen. Fremdbibliotheken werden dann meistens durch ein Script-Tag oder über RequireJS eingebunden und ggf. mit Bower verwaltet. Eine hervorragende, aber momentan noch eher selten genutzte Alternative zu diesem Projekt-Setup ist Browserify.
