@@ -4,6 +4,7 @@ var browserify = require('browserify')
   , clean = require('gulp-clean')
   , connect = require('gulp-connect')
   , eslint = require('gulp-eslint')
+  , glob = require('glob')
   , gulp = require('gulp')
   , mocha = require('gulp-mocha')
   , ngmin = require('gulp-ngmin')
@@ -14,13 +15,26 @@ var browserify = require('browserify')
 
 /*
  * Useful tasks:
- * - gulp fast: browserifies, no minification, does not start server.
- * - gupl watch: starts server, browserify & live reload on changes,
- *               no minification.
- * - gulp: browserifies and minifies, does not start server.
+ * - gulp fast:
+ *   - linting
+ *   - unit tests
+ *   - browserification
+ *   - no minification, does not start server.
+ * - gulp watch:
+ *   - starts server with live reload enabled
+ *   - lints, unit tests, browserifies and live-reloads changes in browser
+ *   - no minification
+ * - gulp:
+ *   - linting
+ *   - unit tests
+ *   - browserification
+ *   - minification and browserification of minified sources
+ *   - start server for e2e tests
+ *   - run Protractor End-to-end tests
+ *   - stop server immediately when e2e tests have finished
  *
- * At development time, you should usually just have run 'gulp watch' in the
- * background.
+ * At development time, you should usually just have 'gulp watch' running in the
+ * background all the time. Use 'gulp' before releases.
  */
 
 var liveReload = true;
@@ -48,7 +62,7 @@ gulp.task('unit', function () {
   .pipe(mocha({ reporter: 'dot' }));
 });
 
-gulp.task('browserify', ['lint', 'unit'], function() {
+gulp.task('browserify', /*['lint', 'unit'],*/ function() {
   return browserify('./app/js/app.js')
   .bundle({ debug: true })
   .pipe(source('app.js'))
@@ -71,6 +85,18 @@ gulp.task('browserify-min', ['ngmin'], function() {
   .pipe(source('app.min.js'))
   .pipe(streamify(uglify({ mangle: false })))
   .pipe(gulp.dest('./app/dist/'));
+});
+
+gulp.task('browserify-tests', function() {
+  var bundler = browserify();
+  glob.sync('./test/unit/**/*.js')
+  .forEach(function(file) {
+    bundler.add(file);
+  })
+  return bundler
+  .bundle({ debug: true })
+  .pipe(source('browserified_tests.js'))
+  .pipe(gulp.dest('./test/browserified'));
 });
 
 gulp.task('server', ['browserify'], function() {
