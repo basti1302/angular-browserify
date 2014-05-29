@@ -1,7 +1,5 @@
 'use strict';
 
-var angular = require('angular');
-
 module.exports = function($scope, TodoService) {
 
   var backupForCancel;
@@ -20,7 +18,7 @@ module.exports = function($scope, TodoService) {
     if ($scope.editMode) {
       return;
     }
-    backupForCancel = angular.copy($scope.$parent.todo);
+    backupForCancel = copy($scope.$parent.todo);
     creatingNew = false;
     $scope.editMode = true;
   };
@@ -54,4 +52,11 @@ module.exports = function($scope, TodoService) {
     $scope.$parent.todo = TodoService.getTodos()[0];
   };
 
+  function copy(todo) {
+    return {
+      title: todo.title,
+      due: todo.due,
+      text: todo.text,
+    };
+  }
 };

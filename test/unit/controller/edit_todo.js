@@ -2,21 +2,12 @@
 
 var chai = require('chai')
   , expect = chai.expect
-  , sandbox = require('sandboxed-module')
   , sinon = require('sinon')
   , sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
-var EditTodoCtrlSandbox = sandbox.load(
-  '../../../app/js/controller/edit_todo.js', {
-  requires: {
-    angular: {
-      copy: sinon.stub().returns({ title: 'the clone' })
-    }
-  }
-});
-var EditTodoCtrlModule = EditTodoCtrlSandbox.exports;
+var EditTodoCtrlModule = require('../../../app/js/controller/edit_todo.js');
 
 describe('The EditTodoCtrl\'s', function() {
 
@@ -74,7 +65,6 @@ describe('The EditTodoCtrl\'s', function() {
 
     it('should edit a todo', function() {
       $scope.edit();
-      expect(EditTodoCtrlSandbox.required.angular.copy).to.have.been.calledOnce;
       expect($scope.editMode).to.be.true;
     });
 
@@ -90,7 +80,7 @@ describe('The EditTodoCtrl\'s', function() {
       $scope.$parent.todo.title = 'changed';
       $scope.cancel();
       expect(TodoService.insert).to.not.have.been.called;
-      expect($scope.$parent.todo.title).to.equal('the clone');
+      expect($scope.$parent.todo.title).to.equal('Todo');
       expect($scope.editMode).to.be.false;
     });
   });
