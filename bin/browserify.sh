@@ -16,4 +16,10 @@ $browserify_cmd \
   --verbose \
   &
 
+$browserify_cmd \
+  test/unit/controller/*.js \
+  test/unit/service/*.js \
+  --outfile test/browserified/browserified_tests.js \
+  &
+
 popd > /dev/null
