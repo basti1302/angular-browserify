@@ -50,6 +50,7 @@ gulp.task('lint', function() {
     'app/js/**/*.js',
     'test/**/*.js',
     '!app/js/third-party/**',
+    '!test/browserified/**',
   ])
   .pipe(eslint())
   .pipe(eslint.format());
@@ -92,7 +93,7 @@ gulp.task('browserify-tests', function() {
   glob.sync('./test/unit/**/*.js')
   .forEach(function(file) {
     bundler.add(file);
-  })
+  });
   return bundler
   .bundle({ debug: true })
   .pipe(source('browserified_tests.js'))
