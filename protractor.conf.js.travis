@@ -8,6 +8,8 @@ exports.config = {
 
   specs: ['test/e2e/**/*_spec.js'],
 
+  rootElement: '.content',
+
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000
