@@ -131,6 +131,8 @@
     "by": true,
     "element": true,
     "expect": true,
-    "protractor": true
+    "protractor": true,
+    "xdescribe": true,
+    "xit": true
   }
 }
