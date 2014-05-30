@@ -13,13 +13,13 @@ $browserify_cmd \
   --entry app/js/app.js \
   --outfile app/dist/app.js \
   --debug \
-  --verbose \
-  &
+  --verbose
 
 $browserify_cmd \
   test/unit/controller/*.js \
   test/unit/service/*.js \
   --outfile test/browserified/browserified_tests.js \
-  &
+  --debug \
+  --verbose
 
 popd > /dev/null
