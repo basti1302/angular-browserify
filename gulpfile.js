@@ -6,6 +6,7 @@ var browserify = require('browserify')
   , eslint = require('gulp-eslint')
   , glob = require('glob')
   , gulp = require('gulp')
+  , karma = require('gulp-karma')
   , mocha = require('gulp-mocha')
   , ngmin = require('gulp-ngmin')
   , protractor = require('gulp-protractor').protractor
@@ -100,6 +101,19 @@ gulp.task('browserify-tests', function() {
   .pipe(gulp.dest('./test/browserified'));
 });
 
+gulp.task('karma', ['browserify-tests'], function() {
+  return gulp
+  .src('./test/browserified/browserified_tests.js')
+  .pipe(karma({
+    configFile: 'karma.conf.js.travis',
+    action: 'run'
+  }))
+  .on('error', function(err) {
+    // Make sure failed tests cause gulp to exit non-zero
+    throw err;
+  });
+});
+
 gulp.task('server', ['browserify'], function() {
   connect.server({
     root: 'app',
@@ -134,5 +148,5 @@ gulp.task('fast', ['clean'], function() {
 
 gulp.task('default', ['clean'], function() {
   liveReload = false;
-  gulp.start('browserify', 'browserify-min', 'e2e');
+  gulp.start('karma', 'browserify', 'browserify-min', 'e2e');
 });
