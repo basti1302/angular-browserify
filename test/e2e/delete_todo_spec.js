@@ -2,7 +2,7 @@
 
 var TodoPage = require('./pages/todo_page');
 
-xdescribe('The todo app (deleting a todo)', function() {
+describe('The todo app (deleting a todo)', function() {
 
   var ptor;
   var todoPage;
