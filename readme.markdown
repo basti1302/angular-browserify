@@ -1,16 +1,7 @@
 AngularJS + Browserify Project Template
 =======================================
 
-[![Build Status](https://travis-ci.org/basti1302/angular-browserify.png?branch=master)](https://travis-ci.org/basti1302/angular-browserify)
-
 This is a small example/seed project for using AngularJS with Browserify. It demonstrates how to structure code by using CommonJS modules together with AngularJS' dependency injection mechanism.
-
-<!--
-Angular and Browserify
-----------------------
-
-TODO: Describe integration of Angular and CommonJS/Browserify
--->
 
 Build
 -----
