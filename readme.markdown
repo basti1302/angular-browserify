@@ -3,6 +3,8 @@ AngularJS + Browserify Project Template
 
 This is a small example/seed project for using AngularJS with Browserify. It demonstrates how to structure code by using CommonJS modules together with AngularJS' dependency injection mechanism.
 
+An accompanying blog post can be found at <https://blog.codecentric.de/en/2014/08/angularjs-browserify/>.
+
 Build
 -----
 
