@@ -9,11 +9,14 @@
     "test": "./node_modules/gulp/bin/gulp.js"
   },
   "dependencies": {
+    "angular": "^1.3.8",
+    "angular-route": "^1.3.8",
     "es5-shim": "^3.0.2",
     "jquery": "^2.1.1"
   },
   "devDependencies": {
     "browserify": "^3.44.2",
+    "browserify-shim": "^3.8.2",
     "chai": "^1.9.1",
     "glob": "^4.0.0",
     "gulp": "^3.6.2",
@@ -38,9 +41,16 @@
     "sinon-chai": "^2.5.0",
     "vinyl-source-stream": "^0.1.1"
   },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "angular": "angular"
+  },
   "browser": {
-    "angular": "./app/js/third-party/angular/angular-index.js",
-    "angular-route": "./app/js/third-party/angular/angular-route.min.js",
+    "angular": "./node_modules/angular/angular.min.js",
     "es5-sham": "./node_modules/es5-shim/es5-sham.min.js",
     "es5-shim": "./node_modules/es5-shim/es5-shim.min.js"
   }
