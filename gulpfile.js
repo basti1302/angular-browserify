@@ -8,7 +8,7 @@ var browserify = require('browserify')
   , gulp = require('gulp')
   , karma = require('gulp-karma')
   , mocha = require('gulp-mocha')
-  , ngmin = require('gulp-ngmin')
+  , ngAnnotate = require('gulp-ng-annotate')
   , protractor = require('gulp-protractor').protractor
   , source = require('vinyl-source-stream')
   , streamify = require('gulp-streamify')
@@ -41,7 +41,7 @@ var browserify = require('browserify')
 var liveReload = true;
 
 gulp.task('clean', function() {
-  return gulp.src(['./app/ngmin', './app/dist'], { read: false })
+  return gulp.src(['./app/ngAnnotate', './app/dist'], { read: false })
   .pipe(clean());
 });
 
@@ -72,17 +72,17 @@ gulp.task('browserify', /*['lint', 'unit'],*/ function() {
   .pipe(connect.reload());
 });
 
-gulp.task('ngmin', ['lint', 'unit'], function() {
+gulp.task('ngAnnotate', ['lint', 'unit'], function() {
   return gulp.src([
     'app/js/**/*.js',
     '!app/js/third-party/**',
   ])
-  .pipe(ngmin())
-  .pipe(gulp.dest('./app/ngmin'));
+  .pipe(ngAnnotate())
+  .pipe(gulp.dest('./app/ngAnnotate'));
 });
 
-gulp.task('browserify-min', ['ngmin'], function() {
-  return browserify('./app/ngmin/app.js')
+gulp.task('browserify-min', ['ngAnnotate'], function() {
+  return browserify('./app/ngAnnotate/app.js')
   .bundle()
   .pipe(source('app.min.js'))
   .pipe(streamify(uglify({ mangle: false })))

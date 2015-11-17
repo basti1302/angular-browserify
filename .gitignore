@@ -5,4 +5,5 @@ node_modules
 *.un~
 
 app/ngmin
+app/ngAnnotate
 app/dist
