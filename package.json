@@ -15,8 +15,8 @@
   "devDependencies": {
     "browserify": "^12.0.1",
     "chai": "^3.4.1",
-    "glob": "^4.0.0",
-    "gulp": "^3.6.2",
+    "glob": "^4.5.3",
+    "gulp": "^3.9.0",
     "gulp-clean": "^0.2.4",
     "gulp-connect": "^2.0.5",
     "gulp-eslint": "^0.1.8",
@@ -36,7 +36,7 @@
     "protractor": "^0.22.0",
     "sinon": "^1.9.1",
     "sinon-chai": "^2.5.0",
-    "vinyl-source-stream": "^0.1.1"
+    "vinyl-source-stream": "^1.1.0"
   },
   "browser": {
     "angular": "./app/js/third-party/angular/angular-index.js",
