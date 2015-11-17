@@ -65,8 +65,8 @@ gulp.task('unit', function () {
 });
 
 gulp.task('browserify', /*['lint', 'unit'],*/ function() {
-  return browserify('./app/js/app.js')
-  .bundle({ debug: true })
+  return browserify('./app/js/app.js', { debug: true })
+  .bundle()
   .pipe(source('app.js'))
   .pipe(gulp.dest('./app/dist/'))
   .pipe(connect.reload());
@@ -90,13 +90,13 @@ gulp.task('browserify-min', ['ngmin'], function() {
 });
 
 gulp.task('browserify-tests', function() {
-  var bundler = browserify();
+  var bundler = browserify({ debug: true });
   glob.sync('./test/unit/**/*.js')
   .forEach(function(file) {
     bundler.add(file);
   });
   return bundler
-  .bundle({ debug: true })
+  .bundle()
   .pipe(source('browserified_tests.js'))
   .pipe(gulp.dest('./test/browserified'));
 });
