@@ -4,20 +4,18 @@ var TodoPage = require('./pages/todo_page');
 
 describe('The todo app', function() {
 
-  var ptor;
   var todoPage;
 
   beforeEach(function() {
     todoPage = new TodoPage();
     todoPage.open();
-    ptor = protractor.getInstance();
 
     // Um, this is not good. Not sure why it is needed :-(
     // Without it, we get an "Error while waiting for Protractor to sync with
     // the page: {}". There are several issues on GitHub describing that but
     // no solution, only workarounds like setting ignoreSynchronization = true
     // or waiting a bit at the start of the test.
-    ptor.ignoreSynchronization = true;
+    browser.ignoreSynchronization = true;
   });
 
   it('should list several todos items', function() {
