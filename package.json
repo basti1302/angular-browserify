@@ -9,7 +9,7 @@
     "test": "./node_modules/gulp/bin/gulp.js"
   },
   "dependencies": {
-    "es5-shim": "^3.0.2",
+    "es5-shim": "^4.3.1",
     "jquery": "^2.1.1"
   },
   "devDependencies": {
