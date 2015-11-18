@@ -13,7 +13,7 @@ This project comes with a `gulpfile` that includes:
 * running ESlint to lint JavaScript sources,
 * running unit tests via Mocha,
 * processing sources with Browserify (to create a non-minfied Browserify bundle),
-* ngmin & uglify (to create an ngmin-processed and minified Browserify bundle),
+* ngAnnotate & uglify (to create an ngAnnotate-processed and minified Browserify bundle),
 * end-to-end tests with Protractor,
 * a static asset server (gulp-connect) and
 * live reload support.

@@ -8,7 +8,7 @@ var browserify = require('browserify')
   , gulp = require('gulp')
   , karma = require('gulp-karma')
   , mocha = require('gulp-mocha')
-  , ngmin = require('gulp-ngmin')
+  , ngAnnotate = require('gulp-ng-annotate')
   , protractor = require('gulp-protractor').protractor
   , source = require('vinyl-source-stream')
   , streamify = require('gulp-streamify')
@@ -41,7 +41,7 @@ var browserify = require('browserify')
 var liveReload = true;
 
 gulp.task('clean', function() {
-  return gulp.src(['./app/ngmin', './app/dist'], { read: false })
+  return gulp.src(['./app/ngAnnotate', './app/dist'], { read: false })
   .pipe(clean());
 });
 
@@ -65,24 +65,24 @@ gulp.task('unit', function () {
 });
 
 gulp.task('browserify', /*['lint', 'unit'],*/ function() {
-  return browserify('./app/js/app.js')
-  .bundle({ debug: true })
+  return browserify('./app/js/app.js', { debug: true })
+  .bundle()
   .pipe(source('app.js'))
   .pipe(gulp.dest('./app/dist/'))
   .pipe(connect.reload());
 });
 
-gulp.task('ngmin', ['lint', 'unit'], function() {
+gulp.task('ngAnnotate', ['lint', 'unit'], function() {
   return gulp.src([
     'app/js/**/*.js',
     '!app/js/third-party/**',
   ])
-  .pipe(ngmin())
-  .pipe(gulp.dest('./app/ngmin'));
+  .pipe(ngAnnotate())
+  .pipe(gulp.dest('./app/ngAnnotate'));
 });
 
-gulp.task('browserify-min', ['ngmin'], function() {
-  return browserify('./app/ngmin/app.js')
+gulp.task('browserify-min', ['ngAnnotate'], function() {
+  return browserify('./app/ngAnnotate/app.js')
   .bundle()
   .pipe(source('app.min.js'))
   .pipe(streamify(uglify({ mangle: false })))
@@ -90,13 +90,13 @@ gulp.task('browserify-min', ['ngmin'], function() {
 });
 
 gulp.task('browserify-tests', function() {
-  var bundler = browserify();
+  var bundler = browserify({ debug: true });
   glob.sync('./test/unit/**/*.js')
   .forEach(function(file) {
     bundler.add(file);
   });
   return bundler
-  .bundle({ debug: true })
+  .bundle()
   .pipe(source('browserified_tests.js'))
   .pipe(gulp.dest('./test/browserified'));
 });
