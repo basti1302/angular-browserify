@@ -1,18 +1,19 @@
 'use strict';
 
 var browserify = require('browserify')
-  , clean = require('gulp-clean')
-  , connect = require('gulp-connect')
-  , eslint = require('gulp-eslint')
-  , glob = require('glob')
-  , gulp = require('gulp')
-  , karma = require('gulp-karma')
-  , mocha = require('gulp-mocha')
-  , ngAnnotate = require('gulp-ng-annotate')
-  , protractor = require('gulp-protractor').protractor
-  , source = require('vinyl-source-stream')
-  , streamify = require('gulp-streamify')
-  , uglify = require('gulp-uglify');
+    , del = require('del')
+    , source = require('vinyl-source-stream')
+    , vinylPaths = require('vinyl-paths')
+    , glob = require('glob')
+    , gulp = require('gulp')
+    , connect = require('gulp-connect')
+    , eslint = require('gulp-eslint')
+    , karma = require('gulp-karma')
+    , mocha = require('gulp-mocha')
+    , ngAnnotate = require('gulp-ng-annotate')
+    , protractor = require('gulp-protractor').protractor
+    , streamify = require('gulp-streamify')
+    , uglify = require('gulp-uglify');
 
 /*
  * Useful tasks:
@@ -40,113 +41,115 @@ var browserify = require('browserify')
 
 var liveReload = true;
 
-gulp.task('clean', function() {
-  return gulp.src(['./app/ngAnnotate', './app/dist'], { read: false })
-  .pipe(clean());
+gulp.task('clean', function () {
+    return gulp.src(['./app/ngAnnotate', './app/dist'], {read: false})
+        .pipe(vinylPaths(del));
 });
 
-gulp.task('lint', function() {
-  return gulp.src([
-    'gulpfile.js',
-    'app/js/**/*.js',
-    'test/**/*.js',
-    '!app/js/third-party/**',
-    '!test/browserified/**'
-  ])
-  .pipe(eslint())
-  .pipe(eslint.format());
+gulp.task('lint', function () {
+    return gulp.src([
+            'gulpfile.js',
+            'app/js/**/*.js',
+            'test/**/*.js',
+            '!app/js/third-party/**',
+            '!test/browserified/**'
+        ])
+        .pipe(eslint())
+        .pipe(eslint.format());
 });
 
 gulp.task('unit', function () {
-  return gulp.src([
-    'test/unit/**/*.js'
-  ])
-  .pipe(mocha({ reporter: 'dot' }));
+    return gulp.src([
+            'test/unit/**/*.js'
+        ])
+        .pipe(mocha({reporter: 'dot'}));
 });
 
-gulp.task('browserify', /*['lint', 'unit'],*/ function() {
-  return browserify('./app/js/app.js', { debug: true })
-  .bundle()
-  .pipe(source('app.js'))
-  .pipe(gulp.dest('./app/dist/'))
-  .pipe(connect.reload());
+gulp.task('browserify', /*['lint', 'unit'],*/ function () {
+    return browserify('./app/js/app.js', {debug: true})
+        .bundle()
+        .pipe(source('app.js'))
+        .pipe(gulp.dest('./app/dist/'))
+        .pipe(connect.reload());
 });
 
-gulp.task('ngAnnotate', ['lint', 'unit'], function() {
-  return gulp.src([
-    'app/js/**/*.js',
-    '!app/js/third-party/**'
-  ])
-  .pipe(ngAnnotate())
-  .pipe(gulp.dest('./app/ngAnnotate'));
+gulp.task('ngAnnotate', ['lint', 'unit'], function () {
+    return gulp.src([
+            'app/js/**/*.js',
+            '!app/js/third-party/**'
+        ])
+        .pipe(ngAnnotate())
+        .pipe(gulp.dest('./app/ngAnnotate'));
 });
 
-gulp.task('browserify-min', ['ngAnnotate'], function() {
-  return browserify('./app/ngAnnotate/app.js')
-  .bundle()
-  .pipe(source('app.min.js'))
-  .pipe(streamify(uglify({ mangle: false })))
-  .pipe(gulp.dest('./app/dist/'));
+gulp.task('browserify-min', ['ngAnnotate'], function () {
+    return browserify('./app/ngAnnotate/app.js')
+        .bundle()
+        .pipe(source('app.min.js'))
+        .pipe(streamify(uglify({mangle: false})))
+        .pipe(gulp.dest('./app/dist/'));
 });
 
-gulp.task('browserify-tests', function() {
-  var bundler = browserify({ debug: true });
-  glob.sync('./test/unit/**/*.js')
-  .forEach(function(file) {
-    bundler.add(file);
-  });
-  return bundler
-  .bundle()
-  .pipe(source('browserified_tests.js'))
-  .pipe(gulp.dest('./test/browserified'));
+gulp.task('browserify-tests', function () {
+    var bundler = browserify({debug: true});
+    glob.sync('./test/unit/**/*.js')
+        .forEach(function (file) {
+            bundler.add(file);
+        });
+    return bundler
+        .bundle()
+        .pipe(source('browserified_tests.js'))
+        .pipe(gulp.dest('./test/browserified'));
 });
 
-gulp.task('karma', ['browserify-tests'], function() {
-  return gulp
-  .src('./test/browserified/browserified_tests.js')
-  .pipe(karma({
-    configFile: 'karma.conf.js.travis',
-    action: 'run'
-  }))
-  .on('error', function(err) {
-    // Make sure failed tests cause gulp to exit non-zero
-    throw err;
-  });
+gulp.task('karma', ['browserify-tests'], function () {
+    return gulp
+        .src('./test/browserified/browserified_tests.js')
+        .pipe(karma({
+            configFile: 'karma.conf.js.travis',
+            action: 'run'
+        }))
+        .on('error', function (err) {
+            // Make sure failed tests cause gulp to exit non-zero
+            throw err;
+        });
 });
 
-gulp.task('server', ['browserify'], function() {
-  connect.server({
-    root: 'app',
-    livereload: liveReload
-  });
+gulp.task('server', ['browserify'], function () {
+    connect.server({
+        root: 'app',
+        livereload: liveReload
+    });
 });
 
-gulp.task('e2e', ['server'], function() {
-  return gulp.src(['./test/e2e/**/*.js'])
-  .pipe(protractor({
-    configFile: 'protractor.conf.js',
-    args: ['--baseUrl', 'http://127.0.0.1:8080']
-  }))
-  .on('error', function(e) { throw e; })
-  .on('end', function() {
-    connect.serverClose();
-  });
+gulp.task('e2e', ['server'], function () {
+    return gulp.src(['./test/e2e/**/*.js'])
+        .pipe(protractor({
+            configFile: 'protractor.conf.js',
+            args: ['--baseUrl', 'http://127.0.0.1:8080']
+        }))
+        .on('error', function (e) {
+            throw e;
+        })
+        .on('end', function () {
+            connect.serverClose();
+        });
 });
 
-gulp.task('watch', function() {
-  gulp.start('server');
-  gulp.watch([
-    'app/js/**/*.js',
-    '!app/js/third-party/**',
-    'test/**/*.js'
-  ], ['fast']);
+gulp.task('watch', function () {
+    gulp.start('server');
+    gulp.watch([
+        'app/js/**/*.js',
+        '!app/js/third-party/**',
+        'test/**/*.js'
+    ], ['fast']);
 });
 
-gulp.task('fast', ['clean'], function() {
-  gulp.start('browserify');
+gulp.task('fast', ['clean'], function () {
+    gulp.start('browserify');
 });
 
-gulp.task('default', ['clean'], function() {
-  liveReload = false;
-  gulp.start('karma', 'browserify', 'browserify-min', 'e2e');
+gulp.task('default', ['clean'], function () {
+    liveReload = false;
+    gulp.start('karma', 'browserify', 'browserify-min', 'e2e');
 });
