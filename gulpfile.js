@@ -51,7 +51,7 @@ gulp.task('lint', function() {
     'app/js/**/*.js',
     'test/**/*.js',
     '!app/js/third-party/**',
-    '!test/browserified/**',
+    '!test/browserified/**'
   ])
   .pipe(eslint())
   .pipe(eslint.format());
@@ -75,7 +75,7 @@ gulp.task('browserify', /*['lint', 'unit'],*/ function() {
 gulp.task('ngAnnotate', ['lint', 'unit'], function() {
   return gulp.src([
     'app/js/**/*.js',
-    '!app/js/third-party/**',
+    '!app/js/third-party/**'
   ])
   .pipe(ngAnnotate())
   .pipe(gulp.dest('./app/ngAnnotate'));
@@ -117,7 +117,7 @@ gulp.task('karma', ['browserify-tests'], function() {
 gulp.task('server', ['browserify'], function() {
   connect.server({
     root: 'app',
-    livereload: liveReload,
+    livereload: liveReload
   });
 });
 
@@ -125,7 +125,7 @@ gulp.task('e2e', ['server'], function() {
   return gulp.src(['./test/e2e/**/*.js'])
   .pipe(protractor({
     configFile: 'protractor.conf.js',
-    args: ['--baseUrl', 'http://127.0.0.1:8080'],
+    args: ['--baseUrl', 'http://127.0.0.1:8080']
   }))
   .on('error', function(e) { throw e; })
   .on('end', function() {
@@ -138,7 +138,7 @@ gulp.task('watch', function() {
   gulp.watch([
     'app/js/**/*.js',
     '!app/js/third-party/**',
-    'test/**/*.js',
+    'test/**/*.js'
   ], ['fast']);
 });
 

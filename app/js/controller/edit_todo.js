@@ -56,7 +56,7 @@ module.exports = function($scope, TodoService) {
     return {
       title: todo.title,
       due: todo.due,
-      text: todo.text,
+      text: todo.text
     };
   }
 };

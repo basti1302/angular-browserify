@@ -19,7 +19,7 @@ describe('The EditTodoCtrl\'s', function() {
     todo = {
       title: 'Todo',
       due: '2015-02-13',
-      text: 'Do it',
+      text: 'Do it'
     };
 
     $scope = {
@@ -32,7 +32,7 @@ describe('The EditTodoCtrl\'s', function() {
       getTodos: sinon.stub().returns([{}]),
       create: sinon.spy(),
       insert: sinon.spy(),
-      remove: sinon.spy(),
+      remove: sinon.spy()
     };
 
     EditTodoCtrlModule($scope, TodoService);

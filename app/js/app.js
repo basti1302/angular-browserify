@@ -18,13 +18,13 @@ app.config(function($routeProvider) {
 
   $routeProvider.when('/todos', {
     templateUrl: 'views/todos.html',
-    controller: 'TodoCtrl',
+    controller: 'TodoCtrl'
   })
   .when('/imprint', {
     templateUrl: 'views/imprint.html',
-    controller: 'ImprintCtrl',
+    controller: 'ImprintCtrl'
   })
   .otherwise({
-    redirectTo: '/todos',
+    redirectTo: '/todos'
   });
 });

@@ -3,6 +3,7 @@ node_modules
 # vim tmp files
 *.swp
 *.un~
+.idea
 
 app/ngmin
 app/ngAnnotate
