@@ -5,15 +5,14 @@ var browserify = require('browserify')
     , source = require('vinyl-source-stream')
     , vinylPaths = require('vinyl-paths')
     , glob = require('glob')
+
     , gulp = require('gulp')
-    , connect = require('gulp-connect')
-    , eslint = require('gulp-eslint')
-    , karma = require('gulp-karma')
-    , mocha = require('gulp-mocha')
-    , ngAnnotate = require('gulp-ng-annotate')
-    , protractor = require('gulp-protractor').protractor
-    , streamify = require('gulp-streamify')
-    , uglify = require('gulp-uglify');
+
+// Load all gulp plugins listed in package.json
+    , gulpPlugins = require('gulp-load-plugins')({
+    pattern: ['gulp-*', 'gulp.*'],
+    replaceString: /\bgulp[\-.]/
+});
 
 /*
  * Useful tasks:
@@ -54,15 +53,15 @@ gulp.task('lint', function () {
             '!app/js/third-party/**',
             '!test/browserified/**'
         ])
-        .pipe(eslint())
-        .pipe(eslint.format());
+        .pipe(gulpPlugins.eslint())
+        .pipe(gulpPlugins.eslint.format());
 });
 
 gulp.task('unit', function () {
     return gulp.src([
             'test/unit/**/*.js'
         ])
-        .pipe(mocha({reporter: 'dot'}));
+        .pipe(gulpPlugins.mocha({reporter: 'dot'}));
 });
 
 gulp.task('browserify', /*['lint', 'unit'],*/ function () {
@@ -70,7 +69,7 @@ gulp.task('browserify', /*['lint', 'unit'],*/ function () {
         .bundle()
         .pipe(source('app.js'))
         .pipe(gulp.dest('./app/dist/'))
-        .pipe(connect.reload());
+        .pipe(gulpPlugins.connect.reload());
 });
 
 gulp.task('ngAnnotate', ['lint', 'unit'], function () {
@@ -78,7 +77,7 @@ gulp.task('ngAnnotate', ['lint', 'unit'], function () {
             'app/js/**/*.js',
             '!app/js/third-party/**'
         ])
-        .pipe(ngAnnotate())
+        .pipe(gulpPlugins.ngAnnotate())
         .pipe(gulp.dest('./app/ngAnnotate'));
 });
 
@@ -86,7 +85,7 @@ gulp.task('browserify-min', ['ngAnnotate'], function () {
     return browserify('./app/ngAnnotate/app.js')
         .bundle()
         .pipe(source('app.min.js'))
-        .pipe(streamify(uglify({mangle: false})))
+        .pipe(gulpPlugins.streamify(gulpPlugins.uglify({mangle: false})))
         .pipe(gulp.dest('./app/dist/'));
 });
 
@@ -105,7 +104,7 @@ gulp.task('browserify-tests', function () {
 gulp.task('karma', ['browserify-tests'], function () {
     return gulp
         .src('./test/browserified/browserified_tests.js')
-        .pipe(karma({
+        .pipe(gulpPlugins.karma({
             configFile: 'karma.conf.js.travis',
             action: 'run'
         }))
@@ -116,7 +115,7 @@ gulp.task('karma', ['browserify-tests'], function () {
 });
 
 gulp.task('server', ['browserify'], function () {
-    connect.server({
+    gulpPlugins.connect.server({
         root: 'app',
         livereload: liveReload
     });
@@ -124,7 +123,7 @@ gulp.task('server', ['browserify'], function () {
 
 gulp.task('e2e', ['server'], function () {
     return gulp.src(['./test/e2e/**/*.js'])
-        .pipe(protractor({
+        .pipe(gulpPlugins.protractor.protractor({
             configFile: 'protractor.conf.js',
             args: ['--baseUrl', 'http://127.0.0.1:8080']
         }))
@@ -132,7 +131,7 @@ gulp.task('e2e', ['server'], function () {
             throw e;
         })
         .on('end', function () {
-            connect.serverClose();
+            gulpPlugins.connect.serverClose();
         });
 });
 
