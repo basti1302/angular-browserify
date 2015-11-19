@@ -59,7 +59,7 @@ gulp.task('lint', function () {
             paths.src + '**/*.js',
             paths.test + '**/*.js',
             '!' + paths.src + 'third-party/**',
-            '!' + paths.test + 'browserified/**'
+            '!' + paths.test + 'browserified/**',
         ])
         .pipe(gulpPlugins.eslint())
         .pipe(gulpPlugins.eslint.format());
@@ -83,7 +83,7 @@ gulp.task('browserify', /*['lint', 'unit'],*/ function () {
 gulp.task('ngAnnotate', ['lint', 'unit'], function () {
     return gulp.src([
             paths.src + '**/*.js',
-            '!' + paths.src + 'third-party/**'
+            '!' + paths.src + 'third-party/**',
         ])
         .pipe(gulpPlugins.ngAnnotate())
         .pipe(gulp.dest(paths.root + 'ngAnnotate'));
@@ -125,7 +125,7 @@ gulp.task('karma', ['browserify-tests'], function () {
 gulp.task('server', ['browserify'], function () {
     gulpPlugins.connect.server({
         root: 'app',
-        livereload: liveReload
+        livereload: liveReload,
     });
 });
 
@@ -133,7 +133,7 @@ gulp.task('e2e', ['server'], function () {
     return gulp.src([paths.test + 'e2e/**/*.js'])
         .pipe(gulpPlugins.protractor.protractor({
             configFile: 'protractor.conf.js',
-            args: ['--baseUrl', 'http://127.0.0.1:8080']
+            args: ['--baseUrl', 'http://127.0.0.1:8080'],
         }))
         .on('error', function (e) {
             throw e;
@@ -148,7 +148,7 @@ gulp.task('watch', function () {
     gulp.watch([
         paths.src + '**/*.js',
         '!' + paths.src + 'third-party/**',
-        paths.test + '**/*.js'
+        paths.test + '**/*.js',
     ], ['fast']);
 });
 
