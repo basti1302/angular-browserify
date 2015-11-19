@@ -14,6 +14,14 @@ var browserify = require('browserify')
     replaceString: /\bgulp[\-.]/
 });
 
+// Define file path variables
+var paths = {
+    root: 'app/',      // App root path
+    src:  'app/js/',   // Source path
+    dist: 'app/dist/', // Distribution path
+    test: 'test/'      // Test path
+};
+
 /*
  * Useful tasks:
  * - gulp fast:
@@ -41,17 +49,17 @@ var browserify = require('browserify')
 var liveReload = true;
 
 gulp.task('clean', function () {
-    return gulp.src(['./app/ngAnnotate', './app/dist'], {read: false})
+    return gulp.src([paths.root + 'ngAnnotate', paths.dist], {read: false})
         .pipe(vinylPaths(del));
 });
 
 gulp.task('lint', function () {
     return gulp.src([
             'gulpfile.js',
-            'app/js/**/*.js',
-            'test/**/*.js',
-            '!app/js/third-party/**',
-            '!test/browserified/**'
+            paths.src + '**/*.js',
+            paths.test + '**/*.js',
+            '!' + paths.src + 'third-party/**',
+            '!' + paths.test + 'browserified/**'
         ])
         .pipe(gulpPlugins.eslint())
         .pipe(gulpPlugins.eslint.format());
@@ -59,51 +67,51 @@ gulp.task('lint', function () {
 
 gulp.task('unit', function () {
     return gulp.src([
-            'test/unit/**/*.js'
+            paths.test + 'unit/**/*.js'
         ])
         .pipe(gulpPlugins.mocha({reporter: 'dot'}));
 });
 
 gulp.task('browserify', /*['lint', 'unit'],*/ function () {
-    return browserify('./app/js/app.js', {debug: true})
+    return browserify(paths.src + 'app.js', {debug: true})
         .bundle()
         .pipe(source('app.js'))
-        .pipe(gulp.dest('./app/dist/'))
+        .pipe(gulp.dest(paths.dist))
         .pipe(gulpPlugins.connect.reload());
 });
 
 gulp.task('ngAnnotate', ['lint', 'unit'], function () {
     return gulp.src([
-            'app/js/**/*.js',
-            '!app/js/third-party/**'
+            paths.src + '**/*.js',
+            '!' + paths.src + 'third-party/**'
         ])
         .pipe(gulpPlugins.ngAnnotate())
-        .pipe(gulp.dest('./app/ngAnnotate'));
+        .pipe(gulp.dest(paths.root + 'ngAnnotate'));
 });
 
 gulp.task('browserify-min', ['ngAnnotate'], function () {
-    return browserify('./app/ngAnnotate/app.js')
+    return browserify(paths.root + 'ngAnnotate/app.js')
         .bundle()
         .pipe(source('app.min.js'))
         .pipe(gulpPlugins.streamify(gulpPlugins.uglify({mangle: false})))
-        .pipe(gulp.dest('./app/dist/'));
+        .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('browserify-tests', function () {
     var bundler = browserify({debug: true});
-    glob.sync('./test/unit/**/*.js')
+    glob.sync(paths.test + 'unit/**/*.js')
         .forEach(function (file) {
             bundler.add(file);
         });
     return bundler
         .bundle()
         .pipe(source('browserified_tests.js'))
-        .pipe(gulp.dest('./test/browserified'));
+        .pipe(gulp.dest(paths.test + 'browserified'));
 });
 
 gulp.task('karma', ['browserify-tests'], function () {
     return gulp
-        .src('./test/browserified/browserified_tests.js')
+        .src(paths.test + 'browserified/browserified_tests.js')
         .pipe(gulpPlugins.karma({
             configFile: 'karma.conf.js.travis',
             action: 'run'
@@ -122,7 +130,7 @@ gulp.task('server', ['browserify'], function () {
 });
 
 gulp.task('e2e', ['server'], function () {
-    return gulp.src(['./test/e2e/**/*.js'])
+    return gulp.src([paths.test + 'e2e/**/*.js'])
         .pipe(gulpPlugins.protractor.protractor({
             configFile: 'protractor.conf.js',
             args: ['--baseUrl', 'http://127.0.0.1:8080']
@@ -138,9 +146,9 @@ gulp.task('e2e', ['server'], function () {
 gulp.task('watch', function () {
     gulp.start('server');
     gulp.watch([
-        'app/js/**/*.js',
-        '!app/js/third-party/**',
-        'test/**/*.js'
+        paths.src + '**/*.js',
+        '!' + paths.src + 'third-party/**',
+        paths.test + '**/*.js'
     ], ['fast']);
 });
 

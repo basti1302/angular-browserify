@@ -20,7 +20,7 @@
     "browserify-shim": "^3.8.2",
     "chai": "^3.4.1",
     "del": "^2.1.0",
-    "glob": "^4.5.3",
+    "glob": "^6.0.1",
     "gulp": "^3.9.0",
     "gulp-clean": "^0.3.1",
     "gulp-connect": "^2.0.5",

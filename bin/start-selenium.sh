@@ -7,4 +7,8 @@ pushd $bin_path/.. > /dev/null
 
 node_modules/protractor/bin/webdriver-manager start
 
+# In case the selenium server does not stop after testing:
+# Type the following link into a browser:
+# http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer
+
 popd > /dev/null
