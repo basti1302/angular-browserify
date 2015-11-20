@@ -1,10 +1,11 @@
 ---
 language: node_js
 node_js:
-  - '0.10'
+  - '4'
+  - '5'
 
 before_script:
-  - npm install -g phantomjs
+  - npm install -g phantomjs@1.9.8
   - cp protractor.conf.js.travis protractor.conf.js
   - cp karma.conf.js.travis karma.conf.js
   - export DISPLAY=:99.0

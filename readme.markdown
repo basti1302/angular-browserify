@@ -1,6 +1,8 @@
 AngularJS + Browserify Project Template
 =======================================
 
+[![Build Status](https://travis-ci.org/basti1302/angular-browserify.png?branch=master)](https://travis-ci.org/angular-browserify/traverson)
+
 This is a small example/seed project for using AngularJS with Browserify. It demonstrates how to structure code by using CommonJS modules together with AngularJS' dependency injection mechanism.
 
 An accompanying blog post can be found at <https://blog.codecentric.de/en/2014/08/angularjs-browserify/>.
@@ -40,9 +42,3 @@ The
     * stop server immediately when e2e tests have finished
 
 At development time, you should usually just have `gulp watch` running in the background all the time. Access the app via http://localhost:8080/. Whenever you change a source file and save it, the browserify bundle is recreated and your browser automatically reloads the changes. Use `gulp` (without a specific task) before releases.
-
-
-Known Issues
-------------
-
-The protractor tests are currently failing on travis-ci. I have not been able to figure out why, yet.
