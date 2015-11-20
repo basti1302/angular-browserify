@@ -5,6 +5,7 @@ var browserify = require('browserify')
   , source = require('vinyl-source-stream')
   , vinylPaths = require('vinyl-paths')
   , glob = require('glob')
+  , Server = require('karma').Server
   , gulp = require('gulp');
 
 // Load all gulp plugins listed in package.json
@@ -110,17 +111,11 @@ gulp.task('browserify-tests', function () {
   .pipe(gulp.dest(paths.test + 'browserified'));
 });
 
-gulp.task('karma', ['browserify-tests'], function () {
-  return gulp
-  .src(paths.test + 'browserified/browserified_tests.js')
-  .pipe(gulpPlugins.karma({
-    configFile: 'karma.conf.js.travis',
-    action: 'run'
-  }))
-  .on('error', function (err) {
-    // Make sure failed tests cause gulp to exit non-zero
-    throw err;
-  });
+gulp.task('karma', ['browserify-tests'], function (done) {
+    new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
 });
 
 gulp.task('server', ['browserify'], function () {
