@@ -5,9 +5,9 @@
   "repository": "https://github.com/basti1302/angular-browserify-seed",
   "license": "MIT",
   "scripts": {
-    "postinstall": "./node_modules/protractor/bin/webdriver-manager update",
-    "pretest": "./node_modules/protractor/bin/webdriver-manager start &",
-    "test": "./node_modules/gulp/bin/gulp.js"
+    "postinstall": "node ./node_modules/protractor/bin/webdriver-manager update",
+    "pretest": "node ./node_modules/protractor/bin/webdriver-manager start &",
+    "test": "node ./node_modules/gulp/bin/gulp.js"
   },
   "dependencies": {
     "angular": "^1.4.7",
