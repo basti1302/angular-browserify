@@ -28,7 +28,7 @@ The
     * unit tests
     * browserification
     * no minification, does not start server
- * `gulp watch`
+* `gulp watch`
     * starts server with live reload enabled
     * lints, unit tests, browserifies and live-reloads changes in browser
     * no minification
