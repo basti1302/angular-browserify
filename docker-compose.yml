@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    app:
+       build: './docker'
+       image: 'angular-app:latest'
+       volumes:
+          - './:/workspace'
+       ports:
+          - '8080:8080'

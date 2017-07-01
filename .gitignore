@@ -7,3 +7,4 @@ node_modules
 app/ngmin
 app/ngAnnotate
 app/dist
+package-lock.json
