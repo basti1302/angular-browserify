@@ -1,3 +1,10 @@
+UNMAINTAINED
+============
+
+*DISCLAIMER: THIS REPOSITORY IS UNMAINTAINED!*
+
+It's up for grabs. If you are interested and want to take it over, open an issue to get into contact.
+
 AngularJS + Browserify Project Template
 =======================================
 
